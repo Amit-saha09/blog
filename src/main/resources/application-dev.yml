@@ -1,0 +1,49 @@
+
+spring:
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/blog?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: postgres
+    password: 123321
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 30000
+      minimumIdle: 7
+      maximumPoolSize: 20
+      poolName: SpringBootJPAHikariCP
+      idleTimeout: 30000
+      maxLifetime: 1800000
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      hibernate:
+        SQL: ERROR
+  file:
+    name: C:/log/acl-service/app.log
+  pattern:
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 0
+
+
+springdoc:
+  swagger-ui:
+    path: blog-ui
+    tags-sorter: alpha
+    operations-sorter: alpha
+    docExpansion: none
+  api-docs:
+    path: /blog-docs
+token-valid-time-milliseconds:
+  jwt_exp: 1800000000
+secret:
+  key: 2F1CD7658B2426A8B94F829EA791EF72F7BF39143963972BB38141CDD6
+um-dearborn:
+  issuer: um-dearborn
