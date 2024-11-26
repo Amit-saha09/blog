@@ -45,34 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             userEmail = jwtService.extractUserEmail(jwt);
 
 
-            // Check if authHeader exist
-       /* if (ObjectUtils.isEmpty(authHeader)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
-        // Look for the "Authorization" cookie
-        Optional<Cookie> authCookie = Arrays.stream(cookies)
-                .filter(cookie -> "token".equals(cookie.getName()))
-                .findFirst();
-
-
-        // If "Authorization" cookie not found, continue with the filter chain
-        if (authCookie.isEmpty()) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        jwt = authCookie.get().getValue();
-        userEmail = jwtService.extractUserEmail(jwt);*/
-
-
-       /* if(authHeader==null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request,response);
-            return;
-        }
-        jwt = authHeader.substring(7);
-        userEmail=jwtService.extractUserEmail(jwt);*/
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = (User) userDetailsService.loadUserByUsername(userEmail);
                 if (jwtService.isTokenValid(jwt, user)) {

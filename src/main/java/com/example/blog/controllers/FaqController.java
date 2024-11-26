@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Amit Saha
  * @since 25th september
  */
+@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping(FaqConstant.FAQ)
 public class FaqController extends BaseController<Faq, FaqRequest, FaqResponse> {

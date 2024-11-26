@@ -101,7 +101,7 @@ public class AuthService implements IAuthService, CommonFunctions {
                 return new ResponseEntity<>(getErrorResponse("User account not found!"), HttpStatus.UNAUTHORIZED);
             }
             User user = optionalUser.get();
-            /*authManager.authenticate(
+            /*authManager.authenticate(m
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()

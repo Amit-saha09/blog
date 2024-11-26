@@ -57,8 +57,6 @@ public class AuthController {
         return authService.authenticate(request, bindingResult);
     }
 
-
-
 }
 
 

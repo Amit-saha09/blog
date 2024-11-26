@@ -6,14 +6,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Data;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 
 @Data
@@ -49,12 +48,12 @@ public class User extends AuditModel<Long> implements UserDetails {
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // If you have roles implemented, uncomment and modify accordingly
-        // if (roles != null) {
-        //     return roles.stream()
-        //             .map(role -> new SimpleGrantedAuthority(role.getName()))
-        //             .collect(Collectors.toSet());
-        // }
+      /*   If you have roles implemented, uncomment and modify accordingly
+         if (roles != null) {
+             return roles.stream()
+                     .map(role -> new SimpleGrantedAuthority(role.getName()))
+                     .collect(Collectors.toSet());
+         }*/
         return Collections.emptySet(); // Return an empty set if no roles are defined
     }
 
