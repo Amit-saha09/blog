@@ -1,0 +1,60 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+</head>
+<body>
+<h2>Contact Us</h2>
+<form id="contactForm">
+    <label for="userName">Your Name:</label>
+    <input type="text" id="userName" name="userName" required>
+    <br><br>
+
+    <label for="userEmail">Your Email:</label>
+    <input type="email" id="userEmail" name="userEmail" required>
+    <br><br>
+
+    <label for="userMessage">Your Message:</label>
+    <textarea id="userMessage" name="userMessage" rows="4" required></textarea>
+    <br><br>
+
+    <button type="button" onclick="submitContactForm()">Submit</button>
+</form>
+
+<div id="responseMessage"></div>
+
+<script>
+    async function submitContactForm() {
+        const userName = document.getElementById("userName").value;
+        const userEmail = document.getElementById("userEmail").value;
+        const userMessage = document.getElementById("userMessage").value;
+
+        const contactData = {
+            userName: userName,
+            userEmail: userEmail,
+            userMessage: userMessage
+        };
+
+        try {
+            const response = await fetch("http://localhost:8201/api/contact-us", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(contactData)
+            });
+
+            const result = await response.json();
+            document.getElementById("responseMessage").innerText =
+                response.ok ? "Your message has been sent successfully!" : `Error: ${result.message}`;
+        } catch (error) {
+            document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
+        }
+    }
+</script>
+</body>
+</html>
+-->

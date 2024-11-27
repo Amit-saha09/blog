@@ -1,0 +1,63 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Suspend/Ban User</title>
+</head>
+<body>
+<h2>Admin Panel - Suspend or Ban User</h2>
+<form id="adminForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br><br>
+
+    <label for="actionType">Action:</label>
+    <select id="actionType" name="actionType" required>
+        <option value="suspend">Suspend</option>
+        <option value="ban">Ban</option>
+    </select>
+    <br><br>
+
+    <label for="duration">Duration (in days):</label>
+    <input type="number" id="duration" name="duration" min="1" step="1">
+    <br><br>
+
+    <button type="button" onclick="manageUser()">Submit</button>
+</form>
+
+<div id="responseMessage"></div>
+
+<script>
+    async function manageUser() {
+        const username = document.getElementById("username").value;
+        const actionType = document.getElementById("actionType").value;
+        const duration = document.getElementById("duration").value || null;
+
+        const actionData = {
+            username: username,
+            actionType: actionType,
+            duration: duration
+        };
+
+        try {
+            const response = await fetch("http://localhost:8201/api/manage-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(actionData)
+            });
+
+            const result = await response.json();
+            document.getElementById("responseMessage").innerText =
+                response.ok ? "Action applied successfully!" : `Error: ${result.message}`;
+        } catch (error) {
+            document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
+        }
+    }
+</script>
+</body>
+</html>
+-->

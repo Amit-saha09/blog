@@ -44,6 +44,14 @@ public class FaqService extends
             instance = new FaqService(faqRepository, modelMapper);
         }
         return instance;
+
+    }
+
+    //******added method to address Professor's comments****** // Simi
+    // Method to destroy the current Singleton instance
+    public static synchronized void resetInstance()
+    {
+        instance = null;
     }
 
 
@@ -62,6 +70,7 @@ public class FaqService extends
      * @author Amit Saha
      * @since 25th september
      */
+
     @Override
     public ResponseEntity<Response<FaqResponse>> createFaq(FaqRequest faqRequest, BindingResult bindingResult) {
         Response<FaqResponse> response = new Response<>();
@@ -85,6 +94,8 @@ public class FaqService extends
                 FaqResponse faqResponse = new FaqResponse();
                 modelMapper.map(faqSave, faqResponse);
                 response.setObj(faqResponse);
+                //********
+
                 return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
             }
             return new ResponseEntity<>(getErrorResponse(CommonMessageConstants.FAQ_QUESTION_TITLE_ALREADY_EXIST), HttpStatus.CONFLICT);

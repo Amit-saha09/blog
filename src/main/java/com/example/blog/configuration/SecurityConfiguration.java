@@ -28,22 +28,25 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize->
                         authorize.requestMatchers(
                                         "/auth/authenticate",
+                                        "/home",
                                         "/auth/registration",
                                         "/auth/refreshToken",
                                         "/auth/register/management",
                                         "/auth/reset-password",
                                         "/auth/provide-reset-password",
                                         "/auth/regenerate/token-for-user",
-                                        "/auth/confirm-account")
+                                        "/auth/confirm-account",
+                                        "/error")
                                 .permitAll()
                                 .requestMatchers("/blog-docs/**","blog-ui","swagger-ui/**")
                                 .permitAll()
-                                .requestMatchers("/faq/get-list","/api/video-content/get-all")
+                                .requestMatchers("/create-faq","/faq/get-list","/api/video-content/get-all")
                                 .permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/error"))
-                                .permitAll()
+                                //.requestMatchers(new AntPathRequestMatcher("/error"))
+                                //.permitAll()
                                 .anyRequest()
                                 .authenticated())
+
                 .sessionManagement(sessionManagement->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

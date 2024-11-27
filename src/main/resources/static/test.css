@@ -1,0 +1,74 @@
+/* General styles for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style for the main heading */
+h1 {
+    color: #4CAF50;
+    text-align: center;
+    font-size: 2.5em;
+    margin-top: 20px;
+}
+
+/* Style for subheadings */
+h2 {
+    color: #333;
+    text-align: center;
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+/* Container for centering content */
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styling */
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 1em;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+/* Link styling */
+a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Footer styling */
+.footer {
+    background-color: #333;
+    color: #f4f4f9;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

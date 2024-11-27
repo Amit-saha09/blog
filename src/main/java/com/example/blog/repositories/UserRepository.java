@@ -20,4 +20,8 @@ public interface UserRepository extends ServiceRepository<User> {
    User findByEmailAndIsActivatedTrue(String email);
    Optional<User> findByEmail(String username);
    Long countByEmailAndIsDeletedFalse(String email);
+
+   /******author-->Simi********/
+   // New method to find all activated users
+   List<User> findByIsActivatedTrue();
 }
