@@ -55,20 +55,20 @@ public class WebController {
     }
 
     // New login page
-    /*@GetMapping("/login")
+    @GetMapping("/auth/authenticate")
     public String loginPage() {
         return "login";  // This will look for login.html in the templates folder
     }
 
     // Handle login POST request
-    @PostMapping("/login")
+    @PostMapping("/auth/authenticate")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest, BindingResult bindingResult) {
         // Call the AuthService to authenticate the user
         return authService.authenticate(authRequest, bindingResult);
     }
 
     // Sign-up page
-    @GetMapping("/signup")
+    /*@GetMapping("/signup")
     public String signupPage() {
         return "signUp";  // This will look for signup.html in the templates folder
     }

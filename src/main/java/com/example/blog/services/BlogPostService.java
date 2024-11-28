@@ -21,7 +21,7 @@ public class BlogPostService {
 
     // Constructor to initialize users
     public BlogPostService() {
-        users = List.of(new User("John"), new User("Bob"), new User("Charlie"));
+        //users = List.of(new User("John"), new User("Bob"), new User("Charlie"));
     }
 
     // Method to create a new BlogPost

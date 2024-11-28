@@ -93,9 +93,9 @@ public class User extends AuditModel<Long> implements UserDetails, Observer {
     // added code ---- author Simi
     private String name;
 
-    public User(String name) {
+    /*public User(String name) {
         this.name = name;
-    }
+    }*/
 
 
     //@Override /*****author-->Simi*****/
