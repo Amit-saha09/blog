@@ -65,6 +65,8 @@ public class AuthService implements IAuthService, CommonFunctions {
             User user = new User();
             user.setFirstName(request.getFirstName());
             user.setLastName(request.getLastName());
+            user.setEmail(request.getEmail());
+            user.setPhone(request.getPhone());
 
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setIsDeleted(false);
