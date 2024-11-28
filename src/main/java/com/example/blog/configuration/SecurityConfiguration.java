@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .requestMatchers("/blog-docs/**","blog-ui","swagger-ui/**")
                                 .permitAll()
-                                .requestMatchers("/create-faq","/faq/get-list","/api/video-content/get-all")
+                                .requestMatchers("/faq/get-list","/api/video-content/get-all")
                                 .permitAll()
                                 //.requestMatchers(new AntPathRequestMatcher("/error"))
                                 //.permitAll()
