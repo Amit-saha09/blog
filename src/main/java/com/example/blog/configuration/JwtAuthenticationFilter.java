@@ -69,11 +69,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
- /*   @Override
+    @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // Skip filtering for specific endpoints, like /api/faq/get-list
         String path = request.getRequestURI();
-        return path.equals("/api/faq/get-list") || path.equals("/api/auth/register");
-    }*/
+        return path.equals("/api/faq/get-list")
+                || path.equals("/api/auth/register")
+                || path.equals("/api/home")
+                ||path.startsWith("/error")
+                ||path.equals("/api/create-faq")
+                ||path.equals("/api/auth/authenticate");
+    }
 
 }

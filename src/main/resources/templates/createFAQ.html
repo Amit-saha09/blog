@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create FAQ</title>
+</head>
+<body>
+<h2>Create a New FAQ</h2>
+<form id="faqForm">
+    <label for="questionTitle">Question Title:</label>
+    <input type="text" id="questionTitle" name="questionTitle" required>
+    <br><br>
+
+    <label for="answerDetails">Answer Details:</label>
+    <input type="text" id="answerDetails" name="answerDetails" required>
+    <br><br>
+
+    <label for="faqStatus">FAQ Status:</label>
+    <input type="checkbox" id="faqStatus" name="faqStatus">
+    <br><br>
+
+    <button type="button" onclick="createFaq()">Submit</button>
+</form>
+
+<div id="responseMessage"></div>
+
+<script>
+    async function createFaq() {
+        const questionTitle = document.getElementById("questionTitle").value;
+        const answerDetails = document.getElementById("answerDetails").value;
+        const faqStatus = document.getElementById("faqStatus").checked;
+
+        const faqData = {
+            questionTitle: questionTitle,
+            answerDetails: answerDetails,
+            faqStatus: faqStatus
+        };
+
+        try {
+            const response = await fetch("http://localhost:8201/api/create-faq", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(faqData)
+            });
+
+            const result = await response.json();
+            document.getElementById("responseMessage").innerText =
+                response.ok ? "FAQ created successfully!" : `Error: ${result.message}`;
+        } catch (error) {
+            document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
+        }
+    }
+</script>
+</body>
+</html>

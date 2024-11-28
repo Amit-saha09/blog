@@ -60,7 +60,14 @@ public class AuthService implements IAuthService, CommonFunctions {
                 return new ResponseEntity<>(getErrorResponse("Email or Phone is already registered!"), HttpStatus.CONFLICT);
             }
             ModelMapper modelMapper = new ModelMapper();
-            User user = modelMapper.map(request, User.class);
+            //User user = modelMapper.map(request, User.class);
+
+            User user = new User();
+            user.setFirstName(request.getFirstName());
+            user.setLastName(request.getLastName());
+            user.setEmail(request.getEmail());
+            user.setPhone(request.getPhone());
+
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setIsDeleted(false);
             user.setIsActivated(true);

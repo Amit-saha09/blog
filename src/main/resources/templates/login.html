@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+</head>
+<body>
+<h2>User Login</h2>
+<form id="loginForm">
+    <label for="email">email:</label>
+    <input type="text" id="email" name="email" required>
+    <br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <br><br>
+
+    <button type="button" onclick="loginUser()">Login</button>
+</form>
+
+<div id="responseMessage"></div>
+
+<script>
+    async function loginUser() {
+        const username = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const loginData = {
+            email: username,
+            password: password
+        };
+
+        try {
+            const response = await fetch("http://localhost:8201/api/auth/authenticate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(loginData)
+            });
+
+            const result = await response.json();
+
+            // Check if the login is successful
+            if (response.ok) {
+                // Store the token in local storage
+                localStorage.setItem('authToken', result.accessToken); // Assuming 'token' is the field in response
+                document.getElementById("responseMessage").innerText = "Login successful!";
+            } else {
+                document.getElementById("responseMessage").innerText = `Error: ${result.message}`;
+            }
+        } catch (error) {
+            document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
+        }
+    }
+</script>
+</body>
+</html>
