@@ -29,6 +29,13 @@ public class SecurityConfiguration {
                         authorize.requestMatchers(
                                         "/auth/authenticate",
                                         "/home",
+                                        "/userBlogList",
+                                        "/about-us",
+                                        "/contact-us",
+                                        "/faq",
+                                        "/log-out",
+                                        "/create-faq",
+                                        "/user-profile",
                                         "/auth/registration",
                                         "/auth/refreshToken",
                                         "/auth/register/management",
@@ -36,7 +43,10 @@ public class SecurityConfiguration {
                                         "/auth/provide-reset-password",
                                         "/auth/regenerate/token-for-user",
                                         "/auth/confirm-account",
-                                        "/error")
+                                        "/error",
+                                        "/css/**",
+                                        "/js/**",
+                                        "/images/**")
                                 .permitAll()
                                 .requestMatchers("/blog-docs/**","blog-ui","swagger-ui/**")
                                 .permitAll()

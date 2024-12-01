@@ -1,5 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create FAQ - Blog Application</title>
+    <link rel="stylesheet" href="createFAQ.css">
+</head>
+
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <h1 class="header-title">Create a New FAQ</h1>
+        <nav class="navigation">
+            <ul class="nav-list">
+                <li><a href="http://localhost:8201/api/home" class="nav-link">Home</a></li>
+                <li><a href="http://localhost:8201/api/faq" class="nav-link">FAQ List</a></li>
+                <li><a href="http://localhost:8201/api/about-us" class="nav-link">About Us</a></li>
+                <li><a href="http://localhost:8201/api/log-out" class="nav-link logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Create FAQ Section -->
+<section class="create-faq">
+    <div class="container">
+        <h2>Submit a New FAQ</h2>
+        <form id="faqForm">
+            <div class="form-group">
+                <label for="questionTitle" class="form-label">Question Title:</label>
+                <input type="text" id="questionTitle" name="questionTitle" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="answerDetails" class="form-label">Answer Details:</label>
+                <textarea id="answerDetails" name="answerDetails" class="form-input" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="faqStatus" class="form-label">FAQ Status:</label>
+                <input type="checkbox" id="faqStatus" name="faqStatus">
+            </div>
+            <button type="button" class="submit-btn" onclick="createFaq()">Submit FAQ</button>
+        </form>
+
+        <div id="responseMessage"></div>
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2024 BlogPost Website. All rights reserved.</p>
+        <nav class="footer-nav">
+            <ul class="footer-nav-list">
+                <li><a href="privacy-policy.html" class="footer-link">Privacy Policy</a></li>
+                <li><a href="terms-of-service.html" class="footer-link">Terms of Service</a></li>
+                <li><a href="contactUs.html" class="footer-link">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+    async function createFaq() {
+        const questionTitle = document.getElementById("questionTitle").value;
+        const answerDetails = document.getElementById("answerDetails").value;
+        const faqStatus = document.getElementById("faqStatus").checked;
+
+        const faqData = {
+            questionTitle: questionTitle,
+            answerDetails: answerDetails,
+            faqStatus: faqStatus
+        };
+
+        try {
+            const response = await fetch("http://localhost:8201/api/create-faq", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(faqData)
+            });
+
+            const result = await response.json();
+            document.getElementById("responseMessage").innerText =
+                response.ok ? "FAQ created successfully!" : `Error: ${result.message}`;
+        } catch (error) {
+            document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
+        }
+    }
+</script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,3 +164,4 @@
 </script>
 </body>
 </html>
+-->

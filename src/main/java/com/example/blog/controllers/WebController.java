@@ -38,9 +38,14 @@ public class WebController {
     }
 
 
-    @GetMapping("/home")
+    /*@GetMapping("/home")
     public String homePage() {
         return "index";  // This will look for index.html in the templates folder
+    }*/
+
+    @GetMapping("/home")
+    public String homePage() {
+        return "home";  // This will look for home.html in the templates folder
     }
 
     @GetMapping("/create-faq")
@@ -67,6 +72,50 @@ public class WebController {
         return authService.authenticate(authRequest, bindingResult);
     }
 
+    // User Blog List page
+    @GetMapping("/userBlogList")
+    public String userBlogList() {
+        return "userBlogList";  // This will look for userBlogList.html in the templates folder
+    }
+
+    //About Us page
+    @GetMapping("/about-us")
+    public String aboutUsPage() {
+        //System.out.println("About Us Page POST request received");
+        return "aboutUs";  // This will look for aboutUs.html in the templates folder
+    }
+
+    //Contact US page
+    @GetMapping("/contact-us")
+    public String contactUsPage() {
+        return "contactUs";  // This will look for contactUs.html in the templates folder
+    }
+
+    //FAQ page
+    @GetMapping("/faq")
+    public String faqPage() {
+        return "faq";  // This will look for faq.html in the templates folder
+    }
+
+    //Log out page
+    @GetMapping("/log-out")
+    public String logoutPage() {
+        return "logout";  // This will look for logout.html in the templates folder
+    }
+
+    //User Profile page
+    @GetMapping("/user-profile")
+    public String userProfilePage() {
+        return "userProfile";  // This will look for logout.html in the templates folder
+    }
+
+    /*@PostMapping("/contact-us")
+    public ResponseEntity<Response<String>> submitContactForm(@RequestBody @Valid ContactRequest contactRequest, BindingResult bindingResult) {
+        // Call the ContactService to handle the contact form submission
+        return contactService.handleContactRequest(contactRequest, bindingResult);
+    }*/
+
+
     // Sign-up page
     /*@GetMapping("/signup")
     public String signupPage() {
@@ -80,16 +129,6 @@ public class WebController {
         return userService.createUser(signupRequest, bindingResult);
     }
 
-    @GetMapping("/contact-us")
-    public String contactUsPage() {
-        return "contactUs";  // This will look for contactUs.html in the templates folder
-    }
-
-    @PostMapping("/contact-us")
-    public ResponseEntity<Response<String>> submitContactForm(@RequestBody @Valid ContactRequest contactRequest, BindingResult bindingResult) {
-        // Call the ContactService to handle the contact form submission
-        return contactService.handleContactRequest(contactRequest, bindingResult);
-    }
 
     @GetMapping("/admin")
     public String adminPage() {

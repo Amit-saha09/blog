@@ -73,12 +73,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // Skip filtering for specific endpoints, like /api/faq/get-list
         String path = request.getRequestURI();
-        return path.equals("/api/faq/get-list")
+        return path.startsWith("/css/")
+               ||path.startsWith("/js/")
+                ||path.startsWith("/images/")
+                ||path.equals("/api/faq/get-list")
                 || path.equals("/api/auth/register")
                 || path.equals("/api/home")
                 ||path.startsWith("/error")
                 ||path.equals("/api/create-faq")
-                ||path.equals("/api/auth/authenticate");
+                ||path.equals("/api/auth/authenticate")
+                ||path.equals("/api/about-us")
+                ||path.equals("/api/userBlogList")
+                ||path.equals("/api/contact-us")
+                ||path.equals("/api/faq")
+                ||path.equals("/api/log-out")
+                ||path.equals("/api/user-profile");
     }
 
 }

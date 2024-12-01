@@ -1,0 +1,238 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and font styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding-top: 60px; /* To avoid content hiding behind fixed header */
+}
+
+/* Heading Styles */
+h1, h2, h3 {
+    font-weight: 700; /* Bold for all headings */
+    color: #2c3e50; /* Darker color for better readability */
+    letter-spacing: 0.5px; /* Slightly increased letter spacing */
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    line-height: 1.3;
+}
+
+/* Specific Adjustments for h1 */
+h1 {
+    font-size: 3.5rem; /* Larger font size for primary heading */
+    margin-bottom: 30px;
+}
+
+/* Specific Adjustments for h2 */
+h2 {
+    font-size: 2.5rem; /* Medium-large size for subheadings */
+    margin-bottom: 25px;
+}
+
+/* Specific Adjustments for h3 */
+h3 {
+    font-size: 2rem; /* Slightly smaller size for third-level headings */
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Paragraphs */
+p {
+    font-size: 1.1rem; /* Slightly larger for better readability */
+    margin-bottom: 20px;
+    color: #555; /* Softer color for body text */
+    line-height: 1.8;
+}
+
+/* Header Styling */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 30px;
+    background-color: #2980b9;
+    color: #fff;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
+}
+
+header .logo h1 {
+    font-size: 2rem; /* Adjusted size for logo */
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem; /* Slightly larger text for navigation */
+}
+
+/* Hover effect for all nav links */
+header nav ul li a:hover {
+    color: #e67e22;
+}
+
+/* Hero Section */
+.hero {
+    background-image: url('hero-image.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.hero-text p {
+    font-size: 1.4rem;
+}
+
+/* About Us Section */
+.about-us {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 60px;
+}
+
+.about-us .content {
+    display: flex;
+    align-items: center;
+}
+
+.about-us .text {
+    width: 60%;
+    padding-right: 20px;
+}
+
+.about-us .image {
+    width: 40%;
+}
+
+.about-us img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* Mission Section */
+.mission {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px 60px;
+    background-color: #f9f9f9;
+}
+
+.mission-text {
+    width: 50%;
+}
+
+.mission-image img {
+    width: 50%;
+    border-radius: 8px;
+}
+
+/* Team Section */
+.team {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.team-member {
+    text-align: center;
+}
+
+.team-member-initials {
+    width: 80px;
+    height: 80px;
+    background-color: #2980b9;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 auto 20px;
+}
+
+.team-member h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.team-member p {
+    font-size: 1.1rem;
+}
+
+/* Footer Section */
+footer {
+    background-color: #2980b9;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+footer nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+footer nav ul li {
+    margin: 0 15px;
+}
+
+footer nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem; /* Ensuring footer links are consistent with other text */
+}
+
+/* Footer Links Hover Effect */
+footer nav ul li a:hover {
+    color: #e67e22;
+}
+
+/* Ensure consistent color for all footer links */
+footer a {
+    color: white;
+}
+
+footer a:hover {
+    color: #e67e22;
+}

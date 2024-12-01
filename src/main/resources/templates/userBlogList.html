@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post Management</title>
+    <link rel="stylesheet" href="userBlogList.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1>Blog Post Management</h1>
+        <button class="btn btn-primary">+ Create New Post</button>
+    </header>
+    <section class="profile">
+        <div class="avatar-initials">JD</div>
+        <div class="user-details">
+            <h2>John Doe</h2>
+            <p>Blog Administrator</p>
+        </div>
+    </section>
+    <section class="content">
+        <div class="controls">
+            <input type="text" id="search" placeholder="Search posts...">
+            <select id="filter-status">
+                <option value="all">All</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+            </select>
+            <select id="filter-category">
+                <option value="all">All Categories</option>
+                <option value="tech">Tech</option>
+                <option value="security">Security</option>
+                <option value="lifestyle">Lifestyle</option>
+            </select>
+        </div>
+        <h2>List of Blog Posts</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date Created</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>View</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Advanced React Techniques</td>
+                <td>Nov 15, 2024</td>
+                <td>Tech</td>
+                <td class="status published">Published</td>
+                <td><button class="btn btn-view">View</button></td>
+                <td><button class="btn btn-edit">Edit</button></td>
+                <td><button class="btn btn-delete">Delete</button></td>
+            </tr>
+            <tr>
+                <td>Cybersecurity Best Practices</td>
+                <td>Oct 22, 2024</td>
+                <td>Security</td>
+                <td class="status draft">Draft</td>
+                <td><button class="btn btn-view">View</button></td>
+                <td><button class="btn btn-edit">Edit</button></td>
+                <td><button class="btn btn-delete">Delete</button></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <button class="btn btn-pagination">Previous</button>
+            <button class="btn btn-pagination">Next</button>
+        </div>
+    </section>
+</div>
+<script>
+    // Check for auth token on page load
+    //document.addEventListener("DOMContentLoaded", function () {
+        //const token = localStorage.getItem('authToken');
+        //if (!token) {
+
+            // Redirect to login page if token is not present
+            //window.location.href = "login.html";
+       // }
+   // });
+
+   async function getBlogPosts() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        // If no token, redirect to login
+        //window.location.href = "login.html";
+        window.location.href = "http://localhost:8201/api/auth/authenticate";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8201/api/post/search-post-by-category-id", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            const posts = await response.json();
+            console.log(posts); // Render the blog posts
+        } else {
+            console.error("Failed to fetch blog posts");
+        }
+    } catch (error) {
+        console.error("Error fetching blog posts:", error);
+    }
+}
+
+
+    // additional JavaScript for page functionality
+</script>
+</body>
+</html>
