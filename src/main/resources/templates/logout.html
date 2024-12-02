@@ -5,6 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Logout</title>
   <link rel="stylesheet" href="logout.css">
+
+  <script>
+    // Function to clear localStorage when logging out
+    function logout() {
+      // Clear all items in localStorage
+      localStorage.clear();
+
+      // Optionally, you can also clear sessionStorage if needed
+      sessionStorage.clear();
+    }
+
+    // Call the logout function when the page loads
+    window.onload = logout;
+
+    // Function to handle the redirection when the user clicks 'Login Again'
+    function redirectToLogin() {
+      window.location.href = 'http://localhost:8201/api/auth/authenticate';
+    }
+  </script>
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -25,7 +44,7 @@
   <div class="logout-container">
     <h1>You've Logged Out</h1>
     <p>Thank you for using BlogPost. Your account has been securely logged out. Come back soon!</p>
-    <a href="http://localhost:8201/api/auth/authenticate" class="button-primary">Login Again</a>
+    <a href="http://localhost:8201/api/auth/authenticate" class="button-primary" onclick="redirectToLogin()">Login Again</a>
   </div>
 </section>
 

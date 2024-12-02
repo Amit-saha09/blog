@@ -1,4 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BlogPost</title>
 
+    <!-- Importing Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <span class="navbar-title">BlogPost Login</span>
+</nav>
+
+<div class="login-container">
+    <div class="login-form">
+        <div class="logo-container">
+            <h1 class="logo">Welcome Back</h1>
+        </div>
+
+        <!-- Login Form with retained functionality -->
+        <form id="loginForm">
+            <input type="text" id="email" name="email" placeholder="Email" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <label for="rememberMe">Remember me</label>
+            </div>
+
+            <button type="button" onclick="loginUser()" class="login-btn">Log In</button>
+        </form>
+
+        <div id="responseMessage"></div>
+
+        <div class="forgot-password">
+            <a href="#">Forgot password?</a>
+        </div>
+    </div>
+
+    <div class="signup-container">
+        <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-container">
+        <p>&copy; 2024 BlogPost. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    async function loginUser() {
+        const username = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const loginData = {
+            email: username,
+            password: password
+        };
+
+        try {
+            const response = await fetch("http://localhost:8201/api/auth/authenticate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(loginData)
+            });
+
+            // Check if the login is successful
+            if (response.ok) {
+                const result = await response.json();
+
+                // Store the token in local storage
+                localStorage.setItem('authToken', result.obj.accessToken); // Assuming 'token' is the field in response
+                document.getElementById("responseMessage").innerText = "Login successful!";
+
+                // Redirect to userBlogList.html
+                window.location.href = "http://localhost:8201/api/userBlogList";
+            } else {
+                document.getElementById("responseMessage").innerText = `Error: ${result.message}`;
+            }
+        } catch (error) {
+            document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
+        }
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,3 +174,4 @@
 </script>
 </body>
 </html>
+-->

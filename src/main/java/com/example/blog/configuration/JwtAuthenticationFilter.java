@@ -73,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // Skip filtering for specific endpoints, like /api/faq/get-list
         String path = request.getRequestURI();
-        return path.endsWith(".css")
+        return path.endsWith("*.css")
                ||path.endsWith(".js")
                 ||path.endsWith(".jpeg")
                 ||path.endsWith(".jpg")

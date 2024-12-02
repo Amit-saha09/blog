@@ -106,7 +106,7 @@ public class WebController {
     //Manage FAQ page
     @GetMapping("/manage-faq")
     public String manageFAQPage() {
-        return "manageFAQ";  // This will look for logout.html in the templates folder
+        return "manageFAQ";  // This will look for manageFAQ.html in the templates folder
     }
 
     //User Profile page

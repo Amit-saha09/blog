@@ -47,7 +47,8 @@ public class SecurityConfiguration {
                                         "/error",
                                         "*.css",
                                         "*.js",
-                                        "*.images")
+                                        "*.jpeg",
+                                        "*.jpg")
                                 .permitAll()
                                 .requestMatchers("/blog-docs/**","blog-ui","swagger-ui/**")
                                 .permitAll()
