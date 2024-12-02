@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="userProfile.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <h1>User Profile</h1>
+      <nav class="navigation">
+        <ul class="nav-list">
+          <li><a href="http://localhost:8201/api/home" class="nav-link">Home</a></li>
+          <li><a href="http://localhost:8201/api/userBlogList" class="nav-link">User Blog List</a></li>
+          <li><a href="http://localhost:8201/api/about-us" class="nav-link">About Us</a></li>
+          <li><a href="http://localhost:8201/api/log-out" class="nav-link logout-btn">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+  <section class="profile">
+    <div class="container">
+      <!-- Banner Section -->
+      <div class="profile-banner">
+        <div class="user-initials">
+          TW
+        </div>
+      </div>
+
+      <!-- Profile Information -->
+      <div class="profile-info">
+        <h2>Tom Walker</h2>
+        <p>Email: twalker1999@example.com</p>
+        <p>Bio: Software developer and blogger</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="edit-profile">
+    <div class="container">
+      <form action="/update-profile" method="post" class="profile-form">
+        <h3>Edit Profile</h3>
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" value="JohnDoe" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" value="johndoe@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio:</label>
+          <textarea id="bio" name="bio" rows="4" placeholder="Write something about yourself...">Software developer and blogger</textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- Footer Section -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2024 BlogPost Website. All rights reserved.</p>
+    <nav class="footer-nav">
+      <ul class="footer-nav-list"><li>
+        <li><a href="privacy-policy.html" class="footer-link">Privacy Policy</a></li>
+        <li><a href="terms-of-service.html" class="footer-link">Terms of Service</a></li>
+        <li><a href="contactUs.html" class="footer-link">Contact Us</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

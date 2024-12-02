@@ -1,0 +1,111 @@
+/* General Styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #F4F4F4; /* Light neutral background */
+  color: #333333; /* Dark gray text for good readability */
+  text-align: center;
+}
+
+/* Contact Container */
+.contact-container {
+  margin: 20px auto;
+  width: 90%;
+  max-width: 1200px;
+  background: #ffffff; /* White background for the contact container */
+  color: #333333; /* Dark gray text for good readability */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Softer shadow for a polished look */
+}
+
+/* Info Section */
+.info-section {
+  display: flex;
+  flex-wrap: wrap;
+  background: #003B5C; /* Dark blue background for info section */
+  color: #ffffff; /* White text */
+  padding: 20px 0;
+  justify-content: space-around;
+}
+
+.info-box {
+  flex: 1 1 250px;
+  max-width: 250px;
+  margin: 10px;
+  text-align: center;
+  padding: 15px;
+}
+
+.info-box i {
+  font-size: 2rem;
+  color: #ffffff; /* White icons to match the background */
+  margin-bottom: 10px;
+}
+
+.info-box h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.info-box p {
+  font-size: 0.9rem;
+}
+
+/* Form Section */
+.form-section {
+  padding: 30px;
+  background: #ffffff; /* White background for the form section */
+}
+
+.form-section h1 {
+  font-size: 2rem;
+  color: #003B5C; /* Dark blue for headings */
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  resize: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #003B5C; /* Dark blue border when focused */
+}
+
+button {
+  background: #003B5C; /* Dark blue background for the button */
+  color: #ffffff; /* White text for the button */
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #002742; /* Darker blue on hover for a subtle effect */
+}
+
+/* Footer */
+footer {
+  margin-top: 20px;
+  padding: 10px;
+  background: #003B5C; /* Dark blue footer */
+  color: #ffffff; /* White text for the footer */
+  font-size: 0.9rem;
+}

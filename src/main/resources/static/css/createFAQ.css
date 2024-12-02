@@ -1,0 +1,169 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and General Layout */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Header Styling */
+.header {
+    background-color: #2a9df4; /* Blue header background */
+    color: white;
+    padding: 10px 0;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between; /* Distribute items horizontally */
+    align-items: center; /* Vertically align items */
+    width: 100%;
+}
+
+.header-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.navigation {
+    margin-left: auto; /* Align navigation links to the right */
+}
+
+.navigation .nav-list {
+    display: flex;
+    gap: 20px; /* Space out the links */
+    list-style-type: none; /* Remove list styling */
+}
+
+.navigation .nav-list li {
+    display: inline; /* Ensures the list items are inline */
+}
+
+.navigation .nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+}
+
+/* Remove the active highlight from links */
+.navigation .nav-link:focus,
+.navigation .nav-link:hover,
+.navigation .nav-link:active,
+.navigation .nav-link:visited {
+    text-decoration: none; /* Remove underline on hover, focus, and visited */
+    color: white; /* Ensure no color change on these states */
+}
+
+/* Specific styling for the logout link to match other links */
+.navigation .logout-link {
+    background-color: transparent; /* Make the background transparent */
+    border: none; /* Remove any border */
+    color: white; /* Ensure it matches other nav links */
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: transparent;
+    color: #00b8d4;
+    text-decoration: none;
+}
+
+/* Create FAQ Section */
+.create-faq {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.create-faq h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.create-faq .form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: #2a9df4;
+    outline: none;
+}
+
+textarea.form-input {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: #2a9df4;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #2a9df4;
+    color: #ffffff;
+    padding: 30px 0;
+    text-align: center;
+}
+
+footer nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+footer nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+footer nav ul li a:hover {
+    text-decoration: underline;
+}
