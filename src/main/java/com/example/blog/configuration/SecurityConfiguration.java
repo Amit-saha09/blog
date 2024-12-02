@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                                         "/faq",
                                         "/log-out",
                                         "/create-faq",
+                                        "/manage-faq",
                                         "/user-profile",
                                         "/auth/registration",
                                         "/auth/refreshToken",

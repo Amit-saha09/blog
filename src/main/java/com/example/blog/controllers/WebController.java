@@ -103,6 +103,12 @@ public class WebController {
         return "logout";  // This will look for logout.html in the templates folder
     }
 
+    //Manage FAQ page
+    @GetMapping("/manage-faq")
+    public String manageFAQPage() {
+        return "manageFAQ";  // This will look for logout.html in the templates folder
+    }
+
     //User Profile page
     @GetMapping("/user-profile")
     public String userProfilePage() {
