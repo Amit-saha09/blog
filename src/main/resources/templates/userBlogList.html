@@ -75,21 +75,10 @@
     </section>
 </div>
 <script>
-    // Check for auth token on page load
-    //document.addEventListener("DOMContentLoaded", function () {
-        //const token = localStorage.getItem('authToken');
-        //if (!token) {
-
-            // Redirect to login page if token is not present
-            //window.location.href = "login.html";
-       // }
-   // });
-
    async function getBlogPosts() {
     const token = localStorage.getItem('authToken');
     if (!token) {
         // If no token, redirect to login
-        //window.location.href = "login.html";
         window.location.href = "http://localhost:8201/api/auth/authenticate";
         return;
     }

@@ -44,9 +44,9 @@ public class SecurityConfiguration {
                                         "/auth/regenerate/token-for-user",
                                         "/auth/confirm-account",
                                         "/error",
-                                        "/css/**",
-                                        "/js/**",
-                                        "/images/**")
+                                        "*.css",
+                                        "*.js",
+                                        "*.images")
                                 .permitAll()
                                 .requestMatchers("/blog-docs/**","blog-ui","swagger-ui/**")
                                 .permitAll()
