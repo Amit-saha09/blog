@@ -4,29 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post Management</title>
-    <link rel="stylesheet" href="userBlogList.css">
+    <link rel="stylesheet" href="Userbloglist.css">
 </head>
 <body>
+
+<!-- Navigation Bar -->
+<header class="navbar">
+    <div class="logo">
+        <a href="home.html">BlogPost</a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="http://localhost:8201/api/home">Home</a></li>
+            <li><a href="http://localhost:8201/api/about-us">About</a></li>
+            <li><a href="http://localhost:8201/api/log-out">Log Out</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Main Content Section -->
 <div class="container">
     <header class="header">
         <h1>Blog Post Management</h1>
-        <button class="btn btn-primary">+ Create New Post</button>
+        <button class="btn btn-primary" onclick="redirectToCreateNewPost()">+ Create New Post</button>
     </header>
+
+    <!-- User Profile Section -->
     <section class="profile">
-        <div class="avatar-initials">JD</div>
+        <div class="avatar-initials">TD</div>
         <div class="user-details">
-            <h2>John Doe</h2>
+            <h2>Tim David</h2>
             <p>Blog Administrator</p>
         </div>
     </section>
+
+    <!-- Content Section -->
     <section class="content">
         <div class="controls">
             <input type="text" id="search" placeholder="Search posts...">
-            <select id="filter-status">
-                <option value="all">All</option>
-                <option value="published">Published</option>
-                <option value="draft">Draft</option>
-            </select>
+            <button class="btn btn-search">Search</button>
             <select id="filter-category">
                 <option value="all">All Categories</option>
                 <option value="tech">Tech</option>
@@ -34,6 +50,7 @@
                 <option value="lifestyle">Lifestyle</option>
             </select>
         </div>
+
         <h2>List of Blog Posts</h2>
         <table class="table">
             <thead>
@@ -48,63 +65,83 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr id="post-1">
                 <td>Advanced React Techniques</td>
                 <td>Nov 15, 2024</td>
                 <td>Tech</td>
                 <td class="status published">Published</td>
-                <td><button class="btn btn-view">View</button></td>
-                <td><button class="btn btn-edit">Edit</button></td>
-                <td><button class="btn btn-delete">Delete</button></td>
+                <td><button class="btn btn-view" data-post-id="1">View</button></td>
+                <td><button class="btn btn-edit" data-post-id="1">Edit</button></td>
+                <td><button class="btn btn-delete" data-post-id="1">Delete</button></td>
             </tr>
-            <tr>
+            <tr id="post-2">
                 <td>Cybersecurity Best Practices</td>
                 <td>Oct 22, 2024</td>
                 <td>Security</td>
                 <td class="status draft">Draft</td>
-                <td><button class="btn btn-view">View</button></td>
-                <td><button class="btn btn-edit">Edit</button></td>
-                <td><button class="btn btn-delete">Delete</button></td>
+                <td><button class="btn btn-view" data-post-id="2">View</button></td>
+                <td><button class="btn btn-edit" data-post-id="2">Edit</button></td>
+                <td><button class="btn btn-delete" data-post-id="2">Delete</button></td>
             </tr>
             </tbody>
         </table>
+
+        <!-- Pagination Controls -->
         <div class="pagination">
             <button class="btn btn-pagination">Previous</button>
             <button class="btn btn-pagination">Next</button>
         </div>
     </section>
 </div>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2024 BlogPost. All rights reserved.</p>
+        <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+</footer>
 <script>
-   async function getBlogPosts() {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        // If no token, redirect to login
-        window.location.href = "http://localhost:8201/api/auth/authenticate";
-        return;
-    }
 
-    try {
-        const response = await fetch("http://localhost:8201/api/post/search-post-by-category-id", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
+    // JavaScript function to handle redirection
+     function redirectToCreateNewPost() {
+         window.location.href = "http://localhost:8201/api/create-blogpost";
+     }
 
-        if (response.ok) {
-            const posts = await response.json();
-            console.log(posts); // Render the blog posts
-        } else {
-            console.error("Failed to fetch blog posts");
-        }
-    } catch (error) {
-        console.error("Error fetching blog posts:", error);
-    }
-}
+    async function getBlogPosts() {
+     const token = localStorage.getItem('authToken');
+     if (!token) {
+         // If no token, redirect to login
+         window.location.href = "http://localhost:8201/api/login";
+         return;
+     }
+
+     try {
+         const response = await fetch("http://localhost:8201/api/post/search-post-by-category-id", {
+             method: "GET",
+             headers: {
+                 "Authorization": `Bearer ${token}`,
+                 "Content-Type": "application/json"
+             }
+         });
+
+         if (response.ok) {
+             const posts = await response.json();
+             console.log(posts); // Render the blog posts
+         } else {
+             console.error("Failed to fetch blog posts");
+         }
+     } catch (error) {
+         console.error("Error fetching blog posts:", error);
+     }
+ }
 
 
-    // additional JavaScript for page functionality
+     // additional JavaScript for page functionality
 </script>
 </body>
 </html>

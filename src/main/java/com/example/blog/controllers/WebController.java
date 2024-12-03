@@ -136,6 +136,12 @@ public class WebController {
         return "userProfile";  // This will look for logout.html in the templates folder
     }
 
+    //Create New Post page
+    @GetMapping("/create-blogpost")
+    public String createBlogPostPage() {
+        return "createBlogPost";  // This will look for createBlogPost.html in the templates folder
+    }
+
     /*@PostMapping("/contact-us")
     public ResponseEntity<Response<String>> submitContactForm(@RequestBody @Valid ContactRequest contactRequest, BindingResult bindingResult) {
         // Call the ContactService to handle the contact form submission

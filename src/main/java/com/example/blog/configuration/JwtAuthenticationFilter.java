@@ -91,7 +91,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 ||path.equals("/api/log-out")
                 ||path.equals("/api/user-profile")
                 ||path.equals("/api/manage-faq")
-                ||path.equals("/api/sign-up");
+                ||path.equals("/api/sign-up")
+                ||path.equals("/api/create-blogpost");
     }
 
 }

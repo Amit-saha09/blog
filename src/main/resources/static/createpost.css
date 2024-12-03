@@ -1,0 +1,182 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Navigation Bar */
+  .navbar {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    margin-left: 20px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .nav-links a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Container */
+  .container {
+    flex: 1;
+    padding: 50px 20px;
+    max-width: 1200px; /* Increase width for larger content area */
+    margin: 50px auto; /* Increase vertical margin for spacing */
+    background-color: white;
+    border-radius: 12px; /* Softer border radius */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Slightly deeper shadow for emphasis */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .container:hover {
+    transform: translateY(-5px); /* Adds a hover effect for professionalism */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Content */
+  .content {
+    padding: 40px; /* More padding for better spacing */
+  }
+  
+  .form-title {
+    text-align: center;
+    color: #007bff;
+    font-size: 2rem; /* Larger font for the title */
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  .form-description {
+    text-align: center;
+    color: #555;
+    margin-bottom: 30px; /* More spacing below description */
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  /* Form */
+  .new-post-form .form-group {
+    margin-bottom: 25px; /* Increased spacing between fields */
+  }
+  
+  .new-post-form label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .new-post-form input,
+  .new-post-form select,
+  .new-post-form textarea {
+    width: 100%;
+    padding: 15px; /* Larger padding for better usability */
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px; /* Softer corners */
+    box-sizing: border-box;
+  }
+  
+  .new-post-form textarea {
+    resize: vertical;
+    min-height: 150px; /* Slightly taller text area for comfort */
+  }
+  
+  .new-post-form input:focus,
+  .new-post-form select:focus,
+  .new-post-form textarea:focus {
+    outline: none;
+    border-color: #007bff; /* Highlight on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Form Buttons */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 15px; /* Add spacing between buttons */
+  }
+  
+  .btn {
+    padding: 12px 25px; /* Larger buttons for better interaction */
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Slight hover effect */
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #495057;
+    transform: translateY(-2px);
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #f1f1f1;
+    border-top: 1px solid #ddd;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .footer-links {
+    margin-bottom: 10px;
+  }
+  
+  .footer-links a {
+    color: #007bff;
+    margin: 0 10px;
+    text-decoration: none;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  
