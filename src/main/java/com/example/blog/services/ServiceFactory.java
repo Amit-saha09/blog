@@ -1,28 +1,25 @@
 package com.example.blog.services;
 
-import com.example.blog.model.ContactUs;
-import com.example.blog.model.Post;
 import com.example.blog.repositories.*;
 import org.modelmapper.ModelMapper;
 
 public class ServiceFactory {
-    public static Object getService(Class<?> serviceClass, Object repository, ModelMapper modelMapper) {
+
+    public static Object getService(Class<?> serviceClass, Object repository, ModelMapper modelMapper,
+                                    UserRepository userRepository, CategoryRepository categoryRepository) {
         if (serviceClass.equals(FaqService.class)) {
-            return FaqService.getInstance((FaqRepository) repository,modelMapper);
+            return FaqService.getInstance((FaqRepository) repository, modelMapper);
         } else if (serviceClass.equals(AboutUsService.class)) {
-            return AboutUsService.getInstance((AboutUsRepository) repository,modelMapper);
-        }else if (serviceClass.equals(CategoryService.class)) {
-            return CategoryService.getInstance((CategoryRepository) repository,modelMapper);
-        }  /*else if (serviceClass.equals(PostService.class)) {
-            // Properly pass the required repositories for PostService
-            PostRepository postRepository = (PostRepository) repository;
-            UserRepository userRepository = new UserRepository();  // Replace this with actual instance or injection
-            CategoryRepository categoryRepository = new CategoryRepository(); // Replace this with actual instance or injection
-            return PostService.getInstance(postRepository, modelMapper, userRepository, categoryRepository);
-        }*/
+            return AboutUsService.getInstance((AboutUsRepository) repository, modelMapper);
+        } else if (serviceClass.equals(CategoryService.class)) {
+            return CategoryService.getInstance((CategoryRepository) repository, modelMapper);
+        } else if (serviceClass.equals(PostService.class)) {
+            if (repository instanceof PostRepository) {
+                return PostService.getInstance((PostRepository) repository, modelMapper, userRepository, categoryRepository);
+            } else {
+                throw new IllegalArgumentException("Invalid repository provided for PostService.");
+            }
+        }
         throw new IllegalArgumentException("No such service found.");
-    }
-    public static Object getServiceForPost(Class<?> serviceClass, PostRepository repository, UserRepository userRepository, CategoryRepository categoryRepository, ModelMapper modelMapper) {
-      return PostService.getInstance(repository, modelMapper, userRepository, categoryRepository);
     }
 }

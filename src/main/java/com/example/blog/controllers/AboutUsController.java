@@ -34,7 +34,13 @@ public class AboutUsController extends BaseController<AboutUs, AboutUsRequest, A
     private final IAboutUsService aboutUsService;
 
     public AboutUsController(AboutUsRepository aboutUsRepository, ModelMapper modelMapper) {
-        this.aboutUsService = (IAboutUsService) ServiceFactory.getService(AboutUsService.class, aboutUsRepository, modelMapper);
+        this.aboutUsService = (IAboutUsService) ServiceFactory.getService(
+                AboutUsService.class,
+                aboutUsRepository,
+                modelMapper,
+                null,  // UserRepository not needed for AboutUsService
+                null   // CategoryRepository not needed for AboutUsService
+        );
     }
 
     @Override

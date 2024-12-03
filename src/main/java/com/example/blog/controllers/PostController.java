@@ -37,7 +37,14 @@ public class PostController extends BaseController<Post, PostRequest, PostRespon
     private final IPostService postService;
 
     public PostController(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, CategoryRepository categoryRepository) {
-        this.postService = (IPostService) ServiceFactory.getServiceForPost(PostService.class, postRepository, userRepository,categoryRepository,modelMapper);
+        // Fetching PostService using the updated getService method
+        this.postService = (IPostService) ServiceFactory.getService(
+                PostService.class,
+                postRepository,
+                modelMapper,
+                userRepository,
+                categoryRepository
+        );
     }
 
     @Override

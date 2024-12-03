@@ -33,9 +33,16 @@ public class CategoryController extends BaseController<Category, CategoryRequest
 
     private final ICategoryService categoryService;
 
-    public CategoryController(CategoryRepository CategoryRepository, ModelMapper modelMapper) {
-        this.categoryService = (ICategoryService) ServiceFactory.getService(CategoryService.class, CategoryRepository, modelMapper);
+    public CategoryController(CategoryRepository categoryRepository, ModelMapper modelMapper) {
+        this.categoryService = (ICategoryService) ServiceFactory.getService(
+                CategoryService.class,
+                categoryRepository,
+                modelMapper,
+                null,  // UserRepository not needed for CategoryService
+                null   // CategoryRepository not needed for CategoryService
+        );
     }
+
 
     @Override
     protected BaseService<Category, CategoryRequest, CategoryResponse> getService() {
