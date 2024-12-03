@@ -73,11 +73,11 @@ public class WebController {
     }
 
     // Handle login POST request
-    @PostMapping("/auth/authenticate")
+    /*@PostMapping("/auth/authenticate")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest, BindingResult bindingResult) {
         // Call the AuthService to authenticate the user
         return authService.authenticate(authRequest, bindingResult);
-    }
+    }*/
 
     // User Blog List page
     @GetMapping("/userBlogList")
@@ -92,12 +92,12 @@ public class WebController {
     }
 
     // Handle POST request for Sign-up
-    @PostMapping("/auth/registration")
+    /*@PostMapping("/auth/registration")
     public ResponseEntity<?> register(RegisterRequest request, BindingResult bindingResult)
     {
         // Call the AuthService to register the user
         return authService.register(request,bindingResult);
-    }
+    }*/
 
     //About Us page
     @GetMapping("/about-us")
