@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                                         "/auth/authenticate",
                                         "/home",
                                         "/login",
+                                        "/sign-up",
                                         "/userBlogList",
                                         "/about-us",
                                         "/contact-us",

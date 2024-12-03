@@ -7,6 +7,7 @@ package com.example.blog.controllers;
 import com.example.blog.helper.Response;
 import com.example.blog.payload.requests.AuthRequest;
 import com.example.blog.payload.requests.FaqRequest;
+import com.example.blog.payload.requests.RegisterRequest;
 import com.example.blog.payload.responses.LoginResponse;
 import com.example.blog.services.AuthService;
 import jakarta.validation.Valid;
@@ -82,6 +83,20 @@ public class WebController {
     @GetMapping("/userBlogList")
     public String userBlogList() {
         return "userBlogList";  // This will look for userBlogList.html in the templates folder
+    }
+
+    //Sign-up page
+    @GetMapping("/sign-up")
+    public String signUpPage() {
+        return "signup";  // This will look for logout.html in the templates folder
+    }
+
+    // Handle POST request for Sign-up
+    @PostMapping("/auth/registration")
+    public ResponseEntity<?> register(RegisterRequest request, BindingResult bindingResult)
+    {
+        // Call the AuthService to register the user
+        return authService.register(request,bindingResult);
     }
 
     //About Us page
