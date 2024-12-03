@@ -84,8 +84,26 @@
                 document.getElementById("responseMessage").innerText = "Login successful!";
 
                 // Redirect to userBlogList.html
-                window.location.href = "http://localhost:8201/api/userBlogList";
-            } else {
+                //window.location.href = "http://localhost:8201/api/userBlogList";
+
+                // Check if a redirectAfterLogin exists
+                const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                if (redirectUrl)
+                {
+                    //alert(`Redirect URL: ${redirectUrl}`);
+                    localStorage.removeItem('redirectAfterLogin'); // Clear the stored URL
+                    window.location.href = redirectUrl; // Redirect back to the previous page
+                }
+                else
+                {
+                    //alert('No redirect URL found in localStorage.');
+                    window.location.href = "http://localhost:8201/api/userBlogList"; // Default redirect
+                }
+
+            }
+
+            else {
+                const result = await response.json();
                 document.getElementById("responseMessage").innerText = `Error: ${result.message}`;
             }
         } catch (error) {

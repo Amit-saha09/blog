@@ -60,7 +60,13 @@ public class WebController {
     }
 
     // New login page
-    @GetMapping("/auth/authenticate")
+    /*@GetMapping("/auth/authenticate")
+    public String loginPage() {
+        return "login";  // This will look for login.html in the templates folder
+    }*/
+
+    // New login page
+    @GetMapping("/login")
     public String loginPage() {
         return "login";  // This will look for login.html in the templates folder
     }

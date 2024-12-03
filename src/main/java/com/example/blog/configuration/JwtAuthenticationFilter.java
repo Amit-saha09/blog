@@ -83,6 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 ||path.startsWith("/error")
                 ||path.equals("/api/create-faq")
                 ||path.equals("/api/auth/authenticate")
+                ||path.equals("/api/login")
                 ||path.equals("/api/about-us")
                 ||path.equals("/api/userBlogList")
                 ||path.equals("/api/contact-us")

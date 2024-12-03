@@ -66,11 +66,34 @@
 <script>
     async function createFaq() {
         const token = localStorage.getItem('authToken');
+        //alert(`Token: ${token}`);
 
         if (!token) {
             document.getElementById("responseMessage").innerText =
                 "Error: You must be logged in to submit a FAQ.";
-                window.location.href = "http://localhost:8201/api/auth/authenticate";
+
+                 //window.location.href = "http://localhost:8201/api/auth/authenticate";
+
+                 window.location.href = "http://localhost:8201/api/login";
+
+                //redirects to login page if the user is not logged in
+                localStorage.setItem('redirectAfterLogin', window.location.href);
+
+                //window.location.href = "http://localhost:8201/api/auth/authenticate";
+
+                window.location.href = "http://localhost:8201/api/login";
+
+                setTimeout(() =>
+                {
+                    window.location.href = "http://localhost:8201/api/login"; // Redirect to login
+               }, 2000);
+
+
+                //setTimeout(() =>
+                //{
+                //window.location.href = "http://localhost:8201/api/auth/authenticate"; // Redirect to login
+               //}, 2000);
+
             return;
         }
 
@@ -107,7 +130,9 @@
                  {
                     // Handle token expiration or invalid token
                     localStorage.removeItem("authToken");
-                    window.location.href = "http://localhost:8201/api/auth/authenticate";
+                    localStorage.setItem('redirectAfterLogin', window.location.href);
+                    //window.location.href = "http://localhost:8201/api/auth/authenticate";
+                    window.location.href = "http://localhost:8201/api/login";
                  }
 
         } catch (error) {
