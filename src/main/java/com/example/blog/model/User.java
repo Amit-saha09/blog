@@ -39,6 +39,9 @@ public class User extends AuditModel<Long> implements UserDetails, Observer {
     @NotNull
     private String password;
 
+
+    private String userType;
+
     @NotNull
     private Boolean isActivated;
 

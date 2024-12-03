@@ -69,6 +69,7 @@ public class AuthService implements IAuthService, CommonFunctions {
             user.setPhone(request.getPhone());
 
             user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setUserType("blog-user");
             user.setIsDeleted(false);
             user.setIsActivated(true);
             user.setCreatedAt(new Date());
@@ -127,6 +128,7 @@ public class AuthService implements IAuthService, CommonFunctions {
 
 
             loginResponse.setEmail(user.getEmail());
+            loginResponse.setUserType(user.getUserType());
             loginResponse.setFirstName(user.getFirstName());
             loginResponse.setLastName(user.getLastName());
             loginResponse.setAccessToken(jwtToken);
