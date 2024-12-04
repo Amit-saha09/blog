@@ -37,9 +37,6 @@
         <label for="category">Category <span class="required">*</span></label>
         <select id="category" name="category" required>
           <option value="">Select a category</option>
-          <option value="Tech">Tech</option>
-          <option value="Security">Security</option>
-          <option value="Health">Health</option>
         </select>
       </div>
 
@@ -151,8 +148,10 @@
     const status = document.getElementById('status').value;
 
     const postData = {
+      title: title,
       description: content,
-      categoryId: parseInt(categoryId)
+      categoryId: parseInt(categoryId),
+      userEmail:localStorage.getItem('userEmail')
     };
 
     try {

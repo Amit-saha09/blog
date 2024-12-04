@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Users</title>
+  <link rel="stylesheet" href="userlist.css">
+</head>
+
+<body>
+
+<!-- Header -->
+<header class="navbar">
+  <h1>ACTIVE USERS</h1>
+</header>
+
+<!-- Content -->
+<div class="container">
+  <div class="header-row">
+    <h2>All Active Users</h2>
+    <div class="search-container">
+      <input type="text" placeholder="Search users..." class="search-box">
+      <button class="search-button">Search</button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>User ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>1</td>
+      <td>john_doe</td>
+      <td>john@example.com</td>
+      <td class="status active">Active</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>jane_smith</td>
+      <td>jane@example.com</td>
+      <td class="status active">Active</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <button onclick="window.location.href='dashboard.html'" class="btn">Back to Dashboard</button>
+</div>
+
+</body>
+
+</html>
