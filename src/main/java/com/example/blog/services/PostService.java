@@ -76,11 +76,10 @@ public class PostService extends
         try {
             User user;
             Category category;
-            if (ObjectUtils.isEmpty(postRequest.getUserId())) {
+            if (ObjectUtils.isEmpty(postRequest.getUserEmail())) {
                 return new ResponseEntity<>(getSuccessResponse("User Not Found", response), HttpStatus.OK);
             } else {
-                user = userRepository.findById(postRequest.getUserId())
-                        .orElseThrow(EntityNotFoundException::new);
+                user = userRepository.findByEmailAndIsActivatedTrue(postRequest.getUserEmail());
             }
 
             if (ObjectUtils.isEmpty(postRequest.getCategoryId())) {
