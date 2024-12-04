@@ -18,6 +18,7 @@ import java.util.Date;
 public class PostRequest extends IdHolderRequestBodyDTO {
 
     private String userEmail;
+    private String title;
 
     private String description;
 

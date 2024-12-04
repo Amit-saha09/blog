@@ -90,6 +90,7 @@ public class PostService extends
             }
             Post post = new Post();
             post.setUser(user);
+            post.setTitle(postRequest.getTitle());
             post.setCategory(category);
             post.setComments(0);
             post.setLikes(0);

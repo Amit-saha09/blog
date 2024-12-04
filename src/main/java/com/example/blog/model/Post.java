@@ -20,6 +20,7 @@ public class Post extends AuditModel<Long> {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    private String title;
 
     private String description;
 
