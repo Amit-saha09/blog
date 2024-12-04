@@ -82,14 +82,13 @@
             document.getElementById("responseMessage").innerText =
                 "Warning: You must be logged in to Create a Post!";
 
-                 //window.location.href = "http://localhost:8201/api/auth/authenticate";
 
-                 window.location.href = "http://localhost:8201/api/login";
+                alert('Warning: You must be logged in to Create a Post!');
+
+                window.location.href = "http://localhost:8201/api/login";
 
                 //redirects to login page if the user is not logged in
                 localStorage.setItem('redirectAfterLogin', window.location.href);
-
-                //window.location.href = "http://localhost:8201/api/auth/authenticate";
 
                 window.location.href = "http://localhost:8201/api/login";
 
@@ -134,8 +133,15 @@
     // **Added check for login token before proceeding**
     const token = localStorage.getItem('authToken');
     if (!token) {
-      alert('You need to log in to save a post.');
-      window.location.href = "http://localhost:8201/api/login"; // **Redirect to login**
+      alert('Warning: You must be logged in to Create a Post!');
+
+      //window.location.href = "http://localhost:8201/api/login";
+
+      //redirects to login page if the user is not logged in
+      localStorage.setItem('redirectAfterLogin', window.location.href);
+
+      window.location.href = "http://localhost:8201/api/login";
+
       return;
     }
 
@@ -161,6 +167,7 @@
 
       if (response.ok) {
         alert('Post created successfully!');
+        window.location.href = "http://localhost:8201/api/userBlogList";
       } else {
         const errorData = await response.json();
         alert(`Failed to create post: ${errorData.message}`);

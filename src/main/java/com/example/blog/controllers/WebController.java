@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired; // Import this for constructor injection
 
 import com.example.blog.services.FaqService;
@@ -78,6 +79,7 @@ public class WebController {
         // Call the AuthService to authenticate the user
         return authService.authenticate(authRequest, bindingResult);
     }*/
+
 
     // User Blog List page
     @GetMapping("/userBlogList")

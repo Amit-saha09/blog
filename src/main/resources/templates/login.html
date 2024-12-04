@@ -83,6 +83,9 @@
                 localStorage.setItem('authToken', result.obj.accessToken); // Assuming 'token' is the field in response
                 document.getElementById("responseMessage").innerText = "Login successful!";
 
+                //set a token for the username
+                localStorage.setItem('userEmail', loginData.email); // Storing email from the login form
+
                 // Redirect to userBlogList.html
                 //window.location.href = "http://localhost:8201/api/userBlogList";
 
@@ -90,13 +93,13 @@
                 const redirectUrl = localStorage.getItem('redirectAfterLogin');
                 if (redirectUrl)
                 {
-                    alert(`Redirect URL: ${redirectUrl}`);
+                    //alert(`Redirect URL: ${redirectUrl}`);
                     localStorage.removeItem('redirectAfterLogin'); // Clear the stored URL
                     window.location.href = redirectUrl; // Redirect back to the previous page
                 }
                 else
                 {
-                    alert('No redirect URL found in localStorage.');
+                    //alert('No redirect URL found in localStorage.');
                     window.location.href = "http://localhost:8201/api/userBlogList"; // Default redirect
                 }
 
