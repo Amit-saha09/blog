@@ -13,6 +13,8 @@ public class ServiceFactory {
             return AboutUsService.getInstance((AboutUsRepository) repository,modelMapper);
         }else if (serviceClass.equals(CategoryService.class)) {
             return CategoryService.getInstance((CategoryRepository) repository,modelMapper);
+        } else if (serviceClass.equals(UserService.class)) {
+            return UserService.getInstance((UserRepository) repository,modelMapper);
         }  /*else if (serviceClass.equals(PostService.class)) {
             // Properly pass the required repositories for PostService
             PostRepository postRepository = (PostRepository) repository;
