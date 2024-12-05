@@ -20,8 +20,8 @@ public interface PostRepository extends ServiceRepository<Post> {
             "where p.isDeleted = false " +
             "and (:description is null or p.description like %:description%) " +
             "and (:categoryId is null or p.category.id = :categoryId) " +
-            "and (:userId is null or p.user.id = :userId)")
+            "and (:userEmail is null or p.user.email = :userEmail)")
     List<Post> findBySearch(@Param("description") String description, @Param("categoryId") Long categoryId
-    ,@Param("userId") Long userId);
+    ,@Param("userEmail") String userEmail);
 
 }

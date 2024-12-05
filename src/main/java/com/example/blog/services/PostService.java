@@ -151,7 +151,7 @@ public class PostService extends
         Response<Post> response = new Response();
         try{
             List<Post> postList = postRepository.findBySearch(postSearchRequest.getDescription(), postSearchRequest.getCategoryId(),
-                    postSearchRequest.getUserId());
+                    postSearchRequest.getUserEmail());
             response.setItems(postList);
             return new ResponseEntity<>(getSuccessResponse("Successful", response), HttpStatus.OK);
         } catch(Exception ex){
