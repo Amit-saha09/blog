@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post Management</title>
     <link rel="stylesheet" href="Userbloglist.css">
 </head>
+
 <body>
 
 <!-- Navigation Bar -->
@@ -38,16 +40,13 @@
         </div>
     </section>
 
-    <!-- Content Section -->
+    <!-- Blog Posts Section -->
     <section class="content">
         <div class="controls">
             <input type="text" id="search" placeholder="Search posts...">
-            <button class="btn btn-search">Search</button>
-            <select id="filter-category">
+            <button class="btn btn-search" onclick="searchBlogPosts()">Search</button>
+            <select id="filter-category" onchange="filterBlogPosts()">
                 <option value="all">All Categories</option>
-                <option value="tech">Tech</option>
-                <option value="security">Security</option>
-                <option value="lifestyle">Lifestyle</option>
             </select>
         </div>
 
@@ -64,32 +63,15 @@
                 <th>Delete</th>
             </tr>
             </thead>
-            <tbody>
-            <tr id="post-1">
-                <td>Advanced React Techniques</td>
-                <td>Nov 15, 2024</td>
-                <td>Tech</td>
-                <td class="status published">Published</td>
-                <td><button class="btn btn-view" data-post-id="1">View</button></td>
-                <td><button class="btn btn-edit" data-post-id="1">Edit</button></td>
-                <td><button class="btn btn-delete" data-post-id="1">Delete</button></td>
-            </tr>
-            <tr id="post-2">
-                <td>Cybersecurity Best Practices</td>
-                <td>Oct 22, 2024</td>
-                <td>Security</td>
-                <td class="status draft">Draft</td>
-                <td><button class="btn btn-view" data-post-id="2">View</button></td>
-                <td><button class="btn btn-edit" data-post-id="2">Edit</button></td>
-                <td><button class="btn btn-delete" data-post-id="2">Delete</button></td>
-            </tr>
+            <tbody id="blog-posts-table">
+            <!-- Dynamic content will be inserted here -->
             </tbody>
         </table>
 
         <!-- Pagination Controls -->
         <div class="pagination">
-            <button class="btn btn-pagination">Previous</button>
-            <button class="btn btn-pagination">Next</button>
+            <button class="btn btn-pagination" onclick="navigatePagination('prev')">Previous</button>
+            <button class="btn btn-pagination" onclick="navigatePagination('next')">Next</button>
         </div>
     </section>
 </div>
@@ -105,43 +87,89 @@
         </ul>
     </div>
 </footer>
+
 <script>
+    // JavaScript function to redirect to create new post page
+    function redirectToCreateNewPost() {
+        window.location.href = "http://localhost:8201/api/create-blogpost";
+    }
 
-    // JavaScript function to handle redirection
-     function redirectToCreateNewPost() {
-         window.location.href = "http://localhost:8201/api/create-blogpost";
-     }
+    // Fetch blog posts and populate the table
+    async function getBlogPosts(category = "all") {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }
 
-    async function getBlogPosts() {
-     const token = localStorage.getItem('authToken');
-     if (!token) {
-         // If no token, redirect to login
-         window.location.href = "http://localhost:8201/api/login";
-         return;
-     }
+        try {
+            const response = await fetch(`http://localhost:8201/api/post/search-post`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
 
-     try {
-         const response = await fetch("http://localhost:8201/api/post/search-post-by-category-id", {
-             method: "GET",
-             headers: {
-                 "Authorization": `Bearer ${token}`,
-                 "Content-Type": "application/json"
-             }
-         });
+            if (response.ok) {
+                const posts = await response.json();
+                alert(posts);
+                populateBlogPosts(posts);
+            } else {
+                console.error("Failed to fetch blog posts");
+            }
+        } catch (error) {
+            console.error("Error fetching blog posts:", error);
+        }
+    }
 
-         if (response.ok) {
-             const posts = await response.json();
-             console.log(posts); // Render the blog posts
-         } else {
-             console.error("Failed to fetch blog posts");
-         }
-     } catch (error) {
-         console.error("Error fetching blog posts:", error);
-     }
- }
+    // Populate the table with blog posts
+    function populateBlogPosts(posts) {
+        const tableBody = document.getElementById('blog-posts-table');
+        tableBody.innerHTML = ''; // Clear existing rows
 
+        if (posts.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7">No blog posts available</td></tr>';
+            return;
+        }
 
-     // additional JavaScript for page functionality
+        alert("Inside populateBlogPosts");
+
+        posts.forEach(post => {
+            const row = document.createElement('tr');
+            row.id = `post-${post.id}`;
+            row.innerHTML = `
+                <td>${post.title}</td>
+                <td>${new Date(post.dateCreated).toLocaleDateString()}</td>
+                <td>${post.category}</td>
+                <td class="status ${post.status.toLowerCase()}">${post.status}</td>
+                <td><button class="btn btn-view" onclick="viewPost(${post.id})">View</button></td>
+                <td><button class="btn btn-edit" onclick="editPost(${post.id})">Edit</button></td>
+                <td><button class="btn btn-delete" onclick="deletePost(${post.id})">Delete</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Additional functions for search, filter, and pagination
+    function searchBlogPosts() {
+        const searchQuery = document.getElementById('search').value;
+        getBlogPosts(searchQuery);
+    }
+
+    function filterBlogPosts() {
+        const category = document.getElementById('filter-category').value;
+        getBlogPosts(category);
+    }
+
+    function navigatePagination(direction) {
+        console.log(`Pagination: ${direction}`); // Placeholder
+        // Implement pagination logic here
+    }
+
+    // Load blog posts on page load
+    document.addEventListener('DOMContentLoaded', () => getBlogPosts());
 </script>
 </body>
+
 </html>

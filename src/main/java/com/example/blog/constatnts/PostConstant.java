@@ -10,6 +10,6 @@ public interface PostConstant {
     String POST = "/post";
     String CREATE_POST = "/create-post";
     String UPDATE_POST = "/update-post";
-    String SEARCH_POST_BY_CATEGORY_ID = "/search-post-by-category-id";
+    String SEARCH_POST_BY_CATEGORY_ID = "/search-post";
     String GET_ALL_POST_BY_USER_ID = "/get-all-post-by-user-id";
 }
