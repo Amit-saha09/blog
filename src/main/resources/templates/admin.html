@@ -159,7 +159,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         // Redirect to login if no token
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("authToken");
         if (!token) {
             window.location.href = "login.html";
             return;
@@ -177,14 +177,14 @@
     });
 
     async function fetchSearchableUsers() {
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("authToken");
 
         try {
             const response = await fetch(`${API_URL}/searchable-user`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ email: null, phone: null }),
             });
@@ -232,7 +232,7 @@
     async function banUser(email) {
         if (!confirm(`Are you sure you want to ban the user with email: ${email}?`)) return;
 
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("authToken");
 
         try {
             const response = await fetch(`${API_URL}/ban-user`, {

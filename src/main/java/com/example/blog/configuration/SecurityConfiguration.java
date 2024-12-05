@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                                         "/userBlogList",
                                         "/about-us",
                                         "/contact-us",
+                                        "/admin",
                                         "/faq",
                                         "/log-out",
                                         "/create-blogpost",
