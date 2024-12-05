@@ -144,6 +144,12 @@ public class WebController {
         return "createBlogPost";  // This will look for createBlogPost.html in the templates folder
     }
 
+    //admin page
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "admin";  // This will look for createBlogPost.html in the templates folder
+    }
+
     /*@PostMapping("/contact-us")
     public ResponseEntity<Response<String>> submitContactForm(@RequestBody @Valid ContactRequest contactRequest, BindingResult bindingResult) {
         // Call the ContactService to handle the contact form submission
