@@ -130,7 +130,7 @@
 
         <!-- Search Bar Section -->
         <div class="search-container">
-            <input type="text" id="searchInput" onkeyup="searchUser()" placeholder="Search for users..." class="search-input">
+            <input type="text" id="searchInput" placeholder="Search for users..." class="search-input">
             <button class="search-btn" onclick="searchUser()">
                 <i class="fas fa-search"></i> Search
             </button>
@@ -157,18 +157,36 @@
 <script>
     const API_URL = "http://localhost:8201/api/user";
 
-    // Fetch and display user data
-    async function searchUser() {
-        const searchInput = document.getElementById("searchInput").value.trim();
-        const requestBody = searchInput ? { email: searchInput, phone: searchInput } : null;
+    document.addEventListener("DOMContentLoaded", () => {
+        // Redirect to login if no token
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        // Redirect if userType is not blog-admin
+        const userType = localStorage.getItem("userType");
+        if (userType !== "blog-admin") {
+            window.location.href = "unauthorized.html";
+            return;
+        }
+
+        // Fetch initial user list
+        fetchSearchableUsers();
+    });
+
+    async function fetchSearchableUsers() {
+        const token = localStorage.getItem("accessToken");
 
         try {
             const response = await fetch(`${API_URL}/searchable-user`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify(requestBody),
+                body: JSON.stringify({ email: null, phone: null }),
             });
 
             if (response.ok) {
@@ -214,18 +232,21 @@
     async function banUser(email) {
         if (!confirm(`Are you sure you want to ban the user with email: ${email}?`)) return;
 
+        const token = localStorage.getItem("accessToken");
+
         try {
             const response = await fetch(`${API_URL}/ban-user`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({ email }),
             });
 
             if (response.ok) {
                 alert(`User with email: ${email} has been banned.`);
-                searchUser(); // Refresh the table
+                fetchSearchableUsers(); // Refresh the table
             } else {
                 console.error("Error banning user:", response.statusText);
                 alert("Failed to ban the user.");
