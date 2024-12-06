@@ -26,6 +26,7 @@ public class UserRequest extends IdHolderRequestBodyDTO {
 
 
     private String phone;
+    private String password;
 
     private String userType;
 
