@@ -29,12 +29,24 @@
 </header>
 
 <script>
+
   // Check if it's the user's first visit
   const isFirstVisit = localStorage.getItem('isFirstVisit');
+  //const isFirstVisitSession = sessionStorage.getItem('isFirstVisitSession');
 
-  // If the flag is not set, clear localStorage and set the flag
-  if (!isFirstVisit) {
+  // If the flag is not set, clear sessionStorage and set the flag
+  /*if (!isFirstVisit) {
     localStorage.clear();
+    localStorage.setItem('isFirstVisit', 'true');
+  }*/
+
+  // Reset local storage when a new user logs in
+  if (isFirstVisit && !localStorage.getItem('userEmail')) {
+    localStorage.removeItem('isFirstVisit');
+  }
+
+  // If the flag is not set for the session, set it to true
+  if (!isFirstVisit && localStorage.getItem('userEmail')) {
     localStorage.setItem('isFirstVisit', 'true');
   }
 
@@ -46,6 +58,7 @@
     // Remove login and sign-up links if the user is logged in
     const loginLink = document.querySelector('a[href="http://localhost:8201/api/login"]');
     const signUpLink = document.querySelector('a[href="http://localhost:8201/api/sign-up"]');
+
     if (userEmail) {
       if (loginLink) loginLink.parentElement.remove(); // Remove login link
       if (signUpLink) signUpLink.parentElement.remove(); // Remove sign-up link
@@ -65,6 +78,9 @@
     // Check and add MyBlogPosts Link if the user is logged in
     let myBlogPostsLink = document.querySelector('.my-blog-posts-link');
     if (!myBlogPostsLink && userEmail) {
+      //alert("Inside myBlogPosts");
+      //alert(userEmail);
+
       myBlogPostsLink = document.createElement('a');
       myBlogPostsLink.href = "http://localhost:8201/api/userBlogList";
       myBlogPostsLink.textContent = 'MyBlogPosts';
@@ -84,6 +100,8 @@
       logoutLink.addEventListener('click', (event) => {
         event.preventDefault(); // Prevent default navigation
         localStorage.clear(); // Clear localStorage on logout
+
+        sessionStorage.clear(); // Clear sessionStorage on logout
         window.location.href = logoutLink.href; // Redirect to logout endpoint
       });
       const logoutListItem = document.createElement('li');

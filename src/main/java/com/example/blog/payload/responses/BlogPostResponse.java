@@ -5,14 +5,14 @@ public class BlogPostResponse {
 
     private Long id;
     private String title;
-    private String content;
+    private String description;
     private boolean isPublished;
 
     // Constructor for response
-    public BlogPostResponse(Long id, String title, String content, boolean isPublished) {
+    public BlogPostResponse(Long id, String title, String description, boolean isPublished) {
         this.id = id;
         this.title = title;
-        this.content = content;
+        this.description = description;
         this.isPublished = isPublished;
     }
 
@@ -33,12 +33,12 @@ public class BlogPostResponse {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean isPublished() {

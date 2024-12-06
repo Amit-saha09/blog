@@ -1,13 +1,12 @@
 /********author--> Simi********/
 package com.example.blog.controllers;
 
-
-
-
 import com.example.blog.helper.Response;
 import com.example.blog.payload.requests.AuthRequest;
+import com.example.blog.payload.requests.BlogPostRequest;
 import com.example.blog.payload.requests.FaqRequest;
 import com.example.blog.payload.requests.RegisterRequest;
+import com.example.blog.payload.responses.BlogPostResponse;
 import com.example.blog.payload.responses.LoginResponse;
 import com.example.blog.services.AuthService;
 import jakarta.validation.Valid;
@@ -19,8 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired; // Import this for constructor injection
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
 
 import com.example.blog.services.FaqService;
+import com.example.blog.services.BlogPostService;
 import com.example.blog.payload.FaqResponse;
 
 @Controller
@@ -29,21 +34,17 @@ public class WebController {
     // Declare a private field for the FaqService instance
     private final FaqService faqService;
     private final AuthService authService; // Inject AuthService for login functionality
+    private final BlogPostService blogPostService;
     //private final UserService userService; // Inject UserService for sign-up functionality
 
     // Constructor injection: Spring will inject the FaqService instance here
     @Autowired
-    public WebController(FaqService faqService, AuthService authService) {
+    public WebController(FaqService faqService, AuthService authService,BlogPostService blogPostService ) {
         this.faqService = faqService;  // Assigning the injected FaqService to the field
         this.authService = authService; // Assign AuthService to the field
+        this.blogPostService = blogPostService;
         //this.userService = userService;  // Assigning the injected UserService to the field
     }
-
-
-    /*@GetMapping("/home")
-    public String homePage() {
-        return "index";  // This will look for index.html in the templates folder
-    }*/
 
     @GetMapping("/home")
     public String homePage() {
@@ -55,11 +56,11 @@ public class WebController {
         return "createFAQ";  // This will look for createFAQ.html in the templates folder
     }
 
-    @PostMapping("/create-faq")
+    /*@PostMapping("/create-faq")
     public ResponseEntity<Response<FaqResponse>> createFaq(@RequestBody @Valid FaqRequest faqRequest, BindingResult bindingResult) {
         // Call the service to handle the FAQ creation logic
         return faqService.createFaq(faqRequest, bindingResult);
-    }
+    }*/
 
     // New login page
     /*@GetMapping("/auth/authenticate")
@@ -98,13 +99,6 @@ public class WebController {
         return "signup";  // This will look for logout.html in the templates folder
     }
 
-    // Handle POST request for Sign-up
-    /*@PostMapping("/auth/registration")
-    public ResponseEntity<?> register(RegisterRequest request, BindingResult bindingResult)
-    {
-        // Call the AuthService to register the user
-        return authService.register(request,bindingResult);
-    }*/
 
     //About Us page
     @GetMapping("/about-us")
@@ -148,6 +142,17 @@ public class WebController {
     public String createBlogPostPage() {
         return "createBlogPost";  // This will look for createBlogPost.html in the templates folder
     }
+
+    // POST request to create a new blog post and log the message
+    /*@PostMapping("/post/create-blogpost")
+    public ResponseEntity<String> createBlogPostLog(@RequestBody BlogPostRequest request) {
+        // Call the service method that creates the post
+        System.out.println("Inside POST Webcontroller");
+
+        blogPostService.createBlogPost(request.getTitle(), request.getDescription());
+        return ResponseEntity.ok("Post created successfully!");
+    }*/
+
 
     //admin page
     @GetMapping("/admin")

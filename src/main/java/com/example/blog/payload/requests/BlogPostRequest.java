@@ -4,7 +4,7 @@ package com.example.blog.payload.requests;
 public class BlogPostRequest {
 
     private String title;
-    private String content;
+    private String description;
 
     // Getters and Setters
     public String getTitle() {
@@ -15,11 +15,11 @@ public class BlogPostRequest {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

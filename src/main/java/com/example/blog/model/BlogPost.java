@@ -15,7 +15,7 @@ public class BlogPost implements Subject {
     private Long id;
 
     private String title;
-    private String content;
+    private String description;
 
     private boolean isPublished = false;
 
@@ -26,9 +26,9 @@ public class BlogPost implements Subject {
     private List<Observer> observers = new ArrayList<>();
 
     // Constructor
-    public BlogPost(String title, String content) {
+    public BlogPost(String title, String description) {
         this.title = title;
-        this.content = content;
+        this.description = description;
     }
 
     // Getters and Setters
@@ -38,8 +38,8 @@ public class BlogPost implements Subject {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public String getDescription() { return description; }
+    public void setDescription(String content) { this.description = description; }
 
     public boolean isPublished() { return isPublished; }
     public void setPublished(boolean published) { isPublished = published; }

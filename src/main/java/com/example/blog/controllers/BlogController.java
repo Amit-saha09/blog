@@ -50,17 +50,13 @@ public class BlogController {
 
     private final BlogPostService blogPostService;
 
-    // Create a new blog post
-   /* @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity<BlogPostResponse> createPost(@RequestBody BlogPostRequest blogPostRequest) {
-        // Use DTO to create a blog post
-        BlogPost blogPost = blogPostService.createBlogPost(blogPostRequest.getTitle(), blogPostRequest.getContent());
-
-        // Simulating hardcoded response with post ID and status
-        BlogPostResponse response = new BlogPostResponse(blogPost.getId(), blogPost.getTitle(), blogPost.getContent(), blogPost.isPublished());
-
+        System.out.println("Inside createPost in BlogController");
+        BlogPost blogPost = blogPostService.createBlogPost(blogPostRequest.getTitle(), blogPostRequest.getDescription());
+        BlogPostResponse response = new BlogPostResponse(blogPost.getId(), blogPost.getTitle(), blogPost.getDescription(), blogPost.isPublished());
         return ResponseEntity.ok(response);
-    }*/
+    }
 
     // Add comment to an existing blog post (using hardcoded values)
     @PostMapping("/{postId}/comment")

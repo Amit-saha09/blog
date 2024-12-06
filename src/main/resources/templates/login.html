@@ -86,24 +86,32 @@
                 //set a token for the username
                 localStorage.setItem('userEmail', result.obj.email); // Storing email from the login form
 
+
                 //set a token for the firstName
                 localStorage.setItem('userFirstName', result.obj.firstName); // Storing firstName from the login form
+
 
                 //set a token for the lastName
                 localStorage.setItem('userLastName', result.obj.lastName); // Storing lastName from the login form
 
+
                 //set a token for the userType
                 localStorage.setItem('userType', result.obj.userType); // Storing userType from the login form
+
 
                 // Redirect to userBlogList.html
                 //window.location.href = "http://localhost:8201/api/userBlogList";
 
                 // Check if a redirectAfterLogin exists
                 const redirectUrl = localStorage.getItem('redirectAfterLogin');
+
+
+                //for local storage
                 if (redirectUrl)
                 {
                     //alert(`Redirect URL: ${redirectUrl}`);
                     localStorage.removeItem('redirectAfterLogin'); // Clear the stored URL
+
                     window.location.href = redirectUrl; // Redirect back to the previous page
                 }
                 else

@@ -53,7 +53,6 @@ public class UserService extends
 
     }
 
-    //******added method to address Professor's comments****** // Simi
     // Method to destroy the current Singleton instance
     public static synchronized void resetInstance()
     {
