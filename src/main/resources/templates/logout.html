@@ -9,6 +9,9 @@
   <script>
     // Function to clear localStorage when logging out
     function logout() {
+
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userEmail');
       // Clear all items in localStorage
       localStorage.clear();
 

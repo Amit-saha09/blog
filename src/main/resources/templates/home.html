@@ -29,7 +29,78 @@
 </header>
 
 <script>
-    localStorage.removeItem('authToken');
+  // Check if it's the user's first visit
+  const isFirstVisit = localStorage.getItem('isFirstVisit');
+
+  // If the flag is not set, clear localStorage and set the flag
+  if (!isFirstVisit) {
+    localStorage.clear();
+    localStorage.setItem('isFirstVisit', 'true');
+  }
+
+  // Function to update the navbar
+  function updateNavbar() {
+    const userEmail = localStorage.getItem('userEmail'); // Retrieve user email from localStorage
+    const navList = document.querySelector('nav ul'); // Get the navigation list
+
+    // Remove login and sign-up links if the user is logged in
+    const loginLink = document.querySelector('a[href="http://localhost:8201/api/login"]');
+    const signUpLink = document.querySelector('a[href="http://localhost:8201/api/sign-up"]');
+    if (userEmail) {
+      if (loginLink) loginLink.parentElement.remove(); // Remove login link
+      if (signUpLink) signUpLink.parentElement.remove(); // Remove sign-up link
+    }
+
+    // Check and add Welcome Message if the user is logged in
+    let welcomeMessage = document.querySelector('.welcome-message');
+    if (!welcomeMessage && userEmail) {
+      welcomeMessage = document.createElement('span');
+      welcomeMessage.textContent = `Welcome, ${userEmail}`;
+      welcomeMessage.classList.add('dynamic-link', 'welcome-message');
+      const welcomeListItem = document.createElement('li');
+      welcomeListItem.appendChild(welcomeMessage);
+      navList.appendChild(welcomeListItem);
+    }
+
+    // Check and add MyBlogPosts Link if the user is logged in
+    let myBlogPostsLink = document.querySelector('.my-blog-posts-link');
+    if (!myBlogPostsLink && userEmail) {
+      myBlogPostsLink = document.createElement('a');
+      myBlogPostsLink.href = "http://localhost:8201/api/userBlogList";
+      myBlogPostsLink.textContent = 'MyBlogPosts';
+      myBlogPostsLink.classList.add('dynamic-link', 'my-blog-posts-link');
+      const myBlogPostsListItem = document.createElement('li');
+      myBlogPostsListItem.appendChild(myBlogPostsLink);
+      navList.appendChild(myBlogPostsListItem);
+    }
+
+    // Check and add Logout Link if the user is logged in
+    let logoutLink = document.querySelector('.logout-link');
+    if (!logoutLink && userEmail) {
+      logoutLink = document.createElement('a');
+      logoutLink.href = "http://localhost:8201/api/log-out";
+      logoutLink.textContent = 'Logout';
+      logoutLink.classList.add('dynamic-link', 'logout-link');
+      logoutLink.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default navigation
+        localStorage.clear(); // Clear localStorage on logout
+        window.location.href = logoutLink.href; // Redirect to logout endpoint
+      });
+      const logoutListItem = document.createElement('li');
+      logoutListItem.appendChild(logoutLink);
+      navList.appendChild(logoutListItem);
+    }
+  }
+
+  // Trigger navbar update when DOM is ready
+  document.addEventListener('DOMContentLoaded', updateNavbar); // Call when the page is loaded
+
+  // Force reload the page after logout to reset navbar state
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      updateNavbar(); // Update navbar on back/forward navigation
+    }
+  });
 </script>
 
 <!-- Hero Section -->

@@ -95,6 +95,16 @@
             return;
         }
 
+        //check if the user is an administrator
+        const adminUser = localStorage.getItem('userType');
+        if (adminUser !== 'blog-admin')
+        {
+            console.log('Access denied: User is not a blog administrator.');
+            alert("Only the blog administrator can create an FAQ!")
+            window.location.href = "http://localhost:8201/api/home";
+        }
+
+
         const questionTitle = document.getElementById("questionTitle").value;
         const answerDetails = document.getElementById("answerDetails").value;
         const faqStatus = document.getElementById("faqStatus").checked;
