@@ -10,6 +10,6 @@ public interface UserConstant {
     String USER = "/user";
     String SEARCH_USER = "/searchable-user";
     String BAN_USER = "/ban-user";
-    String GET_USER_BY_EMAIL = "/get-user-by-email";
+    String GET_USER_BY_EMAIL = "/get-user-by-email/{email}";
     String UPDATE_USER_PROFILE = "/update-user-profile";
 }

@@ -17,6 +17,6 @@ public interface IUserService {
 
     ResponseEntity<?> banUser(String email);
 
-
-
-}
+     ResponseEntity<?> getUserProfile(String email);
+     ResponseEntity<?> updateUserProfile(UserRequest request);
+     }

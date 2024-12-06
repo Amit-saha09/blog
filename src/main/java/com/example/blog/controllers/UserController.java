@@ -71,9 +71,15 @@ public class UserController extends BaseController<User, UserRequest, UserRespon
      */
 
     @PutMapping(path = UserConstant.BAN_USER, produces = "application/json")
-    public ResponseEntity<?> updateUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<?> banUser(@RequestBody UserRequest userRequest){
         return userService.banUser(userRequest.getEmail());
     }
-
-
+    @GetMapping(path = UserConstant.GET_USER_BY_EMAIL, produces = "application/json")
+    public ResponseEntity<?> getUser(@PathVariable("email") String email){
+        return userService.getUserProfile(email);
+    }
+    @PutMapping(path = UserConstant.UPDATE_USER_PROFILE, produces = "application/json")
+    public ResponseEntity<?> updateUser(@RequestBody UserRequest userRequest){
+        return userService.updateUserProfile(userRequest);
+    }
 }
