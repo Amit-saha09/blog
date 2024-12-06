@@ -50,6 +50,8 @@ public class SecurityConfiguration {
                                         "/auth/confirm-account",
                                         "/category/get-list",
                                         "/category/create-category",
+                                        "/viewBlogPost/{id}",
+                                        "/post/get-by-id/{id}",
                                         "/error",
                                         "*.css",
                                         "*.js",
