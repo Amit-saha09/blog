@@ -14,8 +14,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -33,6 +35,8 @@ public class UserService extends
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Private constructor for Singleton
     private UserService(UserRepository userRepository, ModelMapper modelMapper) {
@@ -107,6 +111,51 @@ public class UserService extends
             user.setIsActivated(false);
             userRepository.save(user);
             return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.SAVED_EN), HttpStatus.OK);
+        } catch(Exception ex){
+            logger.error(CommonMessageConstants.SOMETHING_WRONG_EN, ex);
+            ex.printStackTrace();
+            System.out.println(ex);
+            response.setMessage(CommonMessageConstants.SOMETHING_WRONG_EN);
+            response.setSuccess(false);
+            response.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getUserProfile(String email) {
+        Response<UserResponse> response = new Response();
+        try{
+
+            User user = userRepository.findByEmail(email).orElseThrow();
+            UserResponse userResponse =modelMapper.map(user, UserResponse.class);
+            response.setObj(userResponse);
+            return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.DATA_FOUND_EN,response), HttpStatus.OK);
+        } catch(Exception ex){
+            logger.error(CommonMessageConstants.SOMETHING_WRONG_EN, ex);
+            ex.printStackTrace();
+            System.out.println(ex);
+            response.setMessage(CommonMessageConstants.SOMETHING_WRONG_EN);
+            response.setSuccess(false);
+            response.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> updateUserProfile(UserRequest request) {
+        Response<UserResponse> response = new Response();
+        try{
+
+            User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+            user.setFirstName(request.getFirstName());
+            user.setLastName(request.getLastName());
+            user.setPhone(request.getPhone());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(user);
+            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+            response.setObj(userResponse);
+            return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.DATA_FOUND_EN,response), HttpStatus.OK);
         } catch(Exception ex){
             logger.error(CommonMessageConstants.SOMETHING_WRONG_EN, ex);
             ex.printStackTrace();
