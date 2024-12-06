@@ -125,7 +125,7 @@
     <div class="user-management">
         <div class="header-actions">
             <h2>Manage Users</h2>
-            <a href="userlist.html" class="btn view-all-btn">View All Users</a>
+            <button class="btn view-all-btn" onclick="fetchAllUsers()">View All Users</button>
         </div>
 
         <!-- Search Bar Section -->
@@ -155,28 +155,38 @@
 </div>
 
 <script>
-    const API_URL = "http://localhost:8201/api/user";
+    const API_URL = "http://localhost:8201/api/user"; // Adjust URL to your Spring Boot API endpoint
 
     document.addEventListener("DOMContentLoaded", () => {
-        // Redirect to login if no token
         const token = localStorage.getItem("authToken");
         if (!token) {
             window.location.href = "login.html";
             return;
         }
 
-        // Redirect if userType is not blog-admin
         const userType = localStorage.getItem("userType");
         if (userType !== "blog-admin") {
             window.location.href = "unauthorized.html";
             return;
         }
 
-        // Fetch initial user list
-        fetchSearchableUsers();
+        // Fetch all users initially
+        fetchAllUsers();
     });
 
-    async function fetchSearchableUsers() {
+    // Function to handle the search action
+    function searchUser() {
+        const searchInput = document.getElementById('searchInput').value;
+        if (!searchInput.trim()) {
+            alert("Please enter a search query.");
+            return;
+        }
+
+        fetchSearchableUsers(searchInput);  // Pass search input to function
+    }
+
+    // Fetch all users on page load
+    async function fetchAllUsers() {
         const token = localStorage.getItem("authToken");
 
         try {
@@ -186,7 +196,32 @@
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ email: null, phone: null }),
+                body: JSON.stringify({email: null, phone: null }) // Search by email (or phone if needed)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                populateUserTable(data.items || []);
+            } else {
+                console.error("Error fetching users:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    // Fetch searchable users based on search query
+    async function fetchSearchableUsers(searchQuery) {
+        const token = localStorage.getItem("authToken");
+
+        try {
+            const response = await fetch(`${API_URL}/searchable-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ email: searchQuery, phone: null }) // Search by email (or phone if needed)
             });
 
             if (response.ok) {
@@ -236,17 +271,17 @@
 
         try {
             const response = await fetch(`${API_URL}/ban-user`, {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email })
             });
 
             if (response.ok) {
                 alert(`User with email: ${email} has been banned.`);
-                fetchSearchableUsers(); // Refresh the table
+                fetchAllUsers(); // Refresh the table after banning
             } else {
                 console.error("Error banning user:", response.statusText);
                 alert("Failed to ban the user.");
@@ -259,3 +294,14 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
