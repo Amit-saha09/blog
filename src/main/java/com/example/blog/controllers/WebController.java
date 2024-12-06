@@ -87,6 +87,11 @@ public class WebController {
         return "userBlogList";  // This will look for userBlogList.html in the templates folder
     }
 
+    @GetMapping("/viewBlogPost/{id}")
+    public String viewBlogPost() {
+        return "viewBlogPost";  // This will look for userBlogList.html in the templates folder
+    }
+
     //Sign-up page
     @GetMapping("/sign-up")
     public String signUpPage() {
