@@ -72,7 +72,8 @@ public class PostService extends
 
     // Add an observer (user)
     public void addObserver(Observer observer) {
-        observers.add(observer);
+        if (!observers.contains(observer))
+            {observers.add(observer);}
     }
 
     // Remove an observer (user)
@@ -100,7 +101,6 @@ public class PostService extends
             observer.update(postTitle);  // Calling the update() method of the observer (user)
         }
     }
-
 
 
     protected PostRepository getPostRepository() {
