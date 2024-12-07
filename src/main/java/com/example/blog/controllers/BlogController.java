@@ -32,7 +32,7 @@ public class BlogController {
     }
 }*/
 /*******author-->Simi*********/
-package com.example.blog.controllers;
+/*package com.example.blog.controllers;
 
 import com.example.blog.model.BlogPost;
 import com.example.blog.model.Comment;
@@ -75,4 +75,4 @@ public class BlogController {
 
         return ResponseEntity.ok("Blog post published successfully");
     }
-}
+}*/

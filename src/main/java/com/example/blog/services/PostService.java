@@ -5,6 +5,7 @@ import com.example.blog.helper.messages.CommonMessageConstants;
 import com.example.blog.model.Category;
 import com.example.blog.model.Post;
 import com.example.blog.model.User;
+import com.example.blog.payload.requests.BlogPostRequest;
 import com.example.blog.payload.requests.PostRequest;
 import com.example.blog.payload.requests.PostSearchRequest;
 import com.example.blog.payload.responses.PostResponse;
@@ -13,6 +14,7 @@ import com.example.blog.repositories.PostRepository;
 import com.example.blog.repositories.ServiceRepository;
 import com.example.blog.repositories.UserRepository;
 import com.example.blog.services.iService.IPostService;
+import org.apache.catalina.core.ApplicationContext;
 import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -38,21 +40,35 @@ public class PostService extends
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
+    // BlogPostService reference *********Simi
+    private final BlogPostService blogPostService;
+
+
     // Private constructor for Singleton
-    private PostService(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, CategoryRepository categoryRepository) {
+    private PostService
+    (PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository,
+     CategoryRepository categoryRepository, BlogPostService blogPostService ) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+
+        this.blogPostService = blogPostService;
+
     }
 
     // Public method to get the Singleton instance
-    public static synchronized PostService getInstance(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, CategoryRepository categoryRepository) {
+    public static synchronized PostService getInstance(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository,
+                                                       CategoryRepository categoryRepository,
+                                                       BlogPostService blogPostService) {
         if (instance == null) {
-            instance = new PostService(postRepository, modelMapper,userRepository, categoryRepository);
+            instance = new PostService
+                    (postRepository, modelMapper,userRepository,
+                            categoryRepository,blogPostService);
         }
         return instance;
     }
+
 
 
     protected PostRepository getPostRepository() {
@@ -98,6 +114,11 @@ public class PostService extends
             post.setIsDeleted(false);
             post.setImage(postRequest.getImage());
             Post postSave = postRepository.save(post);
+
+            //*****author : Simi*****
+            //creates a log to notify all the users about the new post
+            // Notify observers
+            blogPostService.notifyObservers(postRequest.getTitle());
 
             PostResponse postResponse = new PostResponse();
             modelMapper.map(postSave, postResponse);

@@ -10,7 +10,29 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import com.example.blog.model.Comment;
 
+
+//class to notify all the users about the new post
 @Service
+public class BlogPostService {
+    private final UserRepository userRepository;
+
+
+    public BlogPostService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void notifyObservers(String title) {
+        List<User> subscribedUsers = userRepository.findByIsActivatedTrue();
+        for (User user : subscribedUsers) {
+            // Send notification (e.g., email, console log, etc.)
+            System.out.println("Notifying user: " + user.getEmail() + " about new post: " + title);
+        }
+    }
+}
+
+
+
+/*@Service
 //@RequiredArgsConstructor
 public class BlogPostService {
 
@@ -24,7 +46,7 @@ public class BlogPostService {
     }
 
     // Method to create a new BlogPost; simulation with notifyObservers
-    public BlogPost createBlogPost(String title, String content) {
+    public void createBlogPost(String title, String content) {
         // Create the new blog post
         BlogPost blogPost = new BlogPost(title, content);
 
@@ -34,7 +56,7 @@ public class BlogPostService {
         // Initialize observers (subscribed users)
         blogPost = initializeObservers(blogPost);
         blogPost.notifyObservers(title);
-        return blogPost;
+        //return blogPost;
     }
 
     // Method to initialize observers (subscribed users)
@@ -60,4 +82,4 @@ public class BlogPostService {
     public void publishPost(BlogPost blogPost) {
         blogPost.publish(); // Publish the post and notify observers
     }
-}
+}*/
