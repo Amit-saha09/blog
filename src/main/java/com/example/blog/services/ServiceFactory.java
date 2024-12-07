@@ -28,7 +28,7 @@ public class ServiceFactory {
         throw new IllegalArgumentException("No such service found.");
     }
     public static Object getServiceForPost(Class<?> serviceClass, PostRepository repository, UserRepository userRepository, CategoryRepository categoryRepository, ModelMapper modelMapper) {
-        return PostService.getInstance(repository, modelMapper, userRepository, categoryRepository,new BlogPostService(userRepository));
+        return PostService.getInstance(repository, modelMapper, userRepository, categoryRepository);
 }
 
 }

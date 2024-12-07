@@ -3,9 +3,9 @@ package com.example.blog.services;
 import com.example.blog.helper.Response;
 import com.example.blog.helper.messages.CommonMessageConstants;
 import com.example.blog.model.Category;
+import com.example.blog.model.Observer;
 import com.example.blog.model.Post;
 import com.example.blog.model.User;
-import com.example.blog.payload.requests.BlogPostRequest;
 import com.example.blog.payload.requests.PostRequest;
 import com.example.blog.payload.requests.PostSearchRequest;
 import com.example.blog.payload.responses.PostResponse;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,33 +41,64 @@ public class PostService extends
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    // BlogPostService reference *********Simi
-    private final BlogPostService blogPostService;
+
+    private final List<Observer> observers = new ArrayList<>();  // List to hold observers
 
 
     // Private constructor for Singleton
     private PostService
     (PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository,
-     CategoryRepository categoryRepository, BlogPostService blogPostService ) {
+     CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
 
-        this.blogPostService = blogPostService;
-
     }
 
     // Public method to get the Singleton instance
-    public static synchronized PostService getInstance(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository,
-                                                       CategoryRepository categoryRepository,
-                                                       BlogPostService blogPostService) {
+    public static synchronized PostService getInstance
+    (PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository,
+                                                       CategoryRepository categoryRepository) {
         if (instance == null) {
             instance = new PostService
-                    (postRepository, modelMapper,userRepository,
-                            categoryRepository,blogPostService);
+                    (postRepository, modelMapper,userRepository, categoryRepository);
         }
         return instance;
+    }
+
+    //***author*** Simi
+    //method to add, remove and notify all the users
+
+    // Add an observer (user)
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    // Remove an observer (user)
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    //notify the observers
+    public void notifyObservers(String postTitle) {
+        List<User> subscribedUsers = userRepository.findByIsActivatedTrue();
+
+        //if no active users
+        if (subscribedUsers.isEmpty()) {
+            System.out.println("No active users to notify.");
+            return;
+        }
+
+        // Add each active user as an observer
+        for (Observer user : subscribedUsers) {
+            addObserver(user);  // Adding observer
+        }
+
+        // Notify all observers (users)
+        for (Observer observer : observers) {
+            observer.update(postTitle);  // Calling the update() method of the observer (user)
+        }
     }
 
 
@@ -117,8 +149,7 @@ public class PostService extends
 
             //*****author : Simi*****
             //creates a log to notify all the users about the new post
-            // Notify observers
-            blogPostService.notifyObservers(postRequest.getTitle());
+            notifyObservers(postRequest.getTitle());
 
             PostResponse postResponse = new PostResponse();
             modelMapper.map(postSave, postResponse);

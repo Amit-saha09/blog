@@ -19,10 +19,8 @@ import java.util.Collections;
 @Entity
 @Table(name = "blog_user")
 @ToString
-//public class User extends AuditModel<Long> implements UserDetails {
-/*****author-->Simi******/
-//updated User class extension to Observer class
-public class User extends AuditModel<Long> implements UserDetails, Observer {
+
+public class User extends AuditModel<Long> implements UserDetails,Observer {
     @NotNull
     private String firstName;
 
@@ -92,22 +90,11 @@ public class User extends AuditModel<Long> implements UserDetails, Observer {
         return true;
     }
 
-    // added code ---- author Simi
-    private String name;
-
-    /*public User(String name) {
-        this.name = name;
-    }*/
-
-
-    //@Override /*****author-->Simi*****/
-    /*public void update(String message) {
-        System.out.println("Notification for user: " + firstName + " " + lastName + " - " + message);
-    }*/
-
-    //@Override /*****author-->Simi*****/
-    public void update(String message) {
-        System.out.println("Notification for user: " + name + " - " + message);
+    /*****author Simi****/
+    //implementation of Observer interface
+    public void update(String postTitle)
+    {
+        System.out.println("Notifying user: " + getUsername() + " about new post: " + postTitle);
     }
 
 
