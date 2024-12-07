@@ -291,6 +291,18 @@
         //alert(category);
         getBlogPosts("",category);
     }
+    function viewPost(postId) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert("Please login to view the post!");
+            localStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }
+
+        // Redirect to the post view page with the post ID
+        window.location.href = `http://localhost:8201/api/post/view/${postId}`;
+    }
 
     function navigatePagination(direction) {
         console.log(`Pagination: ${direction}`); // Placeholder
