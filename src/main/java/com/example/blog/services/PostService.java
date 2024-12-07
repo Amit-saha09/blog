@@ -146,9 +146,6 @@ public class PostService extends
             post.setImage(postRequest.getImage());
             Post postSave = postRepository.save(post);
 
-            //*****author : Simi*****
-            //creates a log to notify all the users about the new post
-            //notifyObservers(postRequest.getTitle());
 
             PostResponse postResponse = new PostResponse();
             modelMapper.map(postSave, postResponse);
@@ -159,6 +156,7 @@ public class PostService extends
             ResponseEntity<Response<PostResponse>> responseEntity = new ResponseEntity<>(
                     getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
 
+            //*****author : Simi*****
             // Check if the response status is 200 OK
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 // Notify observers if response is 200 OK

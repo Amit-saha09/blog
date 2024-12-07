@@ -32,8 +32,7 @@ public class WebController {
     // Declare a private field for the FaqService instance
     private final FaqService faqService;
     private final AuthService authService; // Inject AuthService for login functionality
-    //private final BlogPostService blogPostService;
-    //private final UserService userService; // Inject UserService for sign-up functionality
+
 
     // Constructor injection: Spring will inject the FaqService instance here
     public WebController(FaqService faqService, AuthService authService) {
@@ -45,6 +44,12 @@ public class WebController {
     @GetMapping("/home")
     public String homePage() {
         return "home";  // This will look for home.html in the templates folder
+    }
+
+    //Contact US page
+    @GetMapping("/blog-post")
+    public String blogPostPage() {
+        return "blogPost";  // This will look for blogPost.html in the templates folder
     }
 
     @GetMapping("/create-faq")

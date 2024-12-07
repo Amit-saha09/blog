@@ -1,0 +1,227 @@
+/* General Styles for the Page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9; /* Light grey background */
+}
+
+/* Navigation Bar Styles */
+.navbar {
+    background-color: #007BFF; /* Blue background */
+    color: #fff; /* White text */
+    padding: 15px 0;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.navbar .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar .nav-links li {
+    margin: 0 10px;
+}
+
+.navbar .nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navbar .nav-links a:hover {
+    color: #ffcc00; /* Hover effect */
+}
+
+/* Search Box Styles */
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+#search-box {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#category-select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Blog Feed Section Styles */
+.blog-feed {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+/* Post Styles */
+.post {
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+/* Post Header (Author and Date) */
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.name-poster {
+    background-color: #007BFF;
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+/* Post Info (Author Name and Date) */
+.post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.post-date {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.author-email {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Post Content (Text of the Blog Post) */
+.post-content {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.post-content h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #007BFF; /* Title color */
+}
+
+.read-more {
+    display: inline-block;
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* Author's Brief Description */
+.post-description {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    padding: 0;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #fff;
+    margin: 0 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #ffcc00;
+}
+
+.footer p {
+    font-size: 0.9rem;
+    color: #fff;
+    margin: 0;
+    padding: 0 20px;
+    text-align: center;
+}
