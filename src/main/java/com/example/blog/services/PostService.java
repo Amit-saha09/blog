@@ -102,7 +102,6 @@ public class PostService extends
         }
     }
 
-
     protected PostRepository getPostRepository() {
         return postRepository;
     }
@@ -149,12 +148,26 @@ public class PostService extends
 
             //*****author : Simi*****
             //creates a log to notify all the users about the new post
-            notifyObservers(postRequest.getTitle());
+            //notifyObservers(postRequest.getTitle());
 
             PostResponse postResponse = new PostResponse();
             modelMapper.map(postSave, postResponse);
             response.setObj(postResponse);
-            return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
+            //return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
+
+            // Create the ResponseEntity with status 200 OK
+            ResponseEntity<Response<PostResponse>> responseEntity = new ResponseEntity<>(
+                    getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
+
+            // Check if the response status is 200 OK
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                // Notify observers if response is 200 OK
+                notifyObservers(postRequest.getTitle());
+            }
+
+            return responseEntity;
+
+
         }catch(Exception ex){
             logger.error(CommonMessageConstants.NOT_SAVED_EN, ex);
             ex.printStackTrace();
