@@ -53,6 +53,7 @@
   // Function to update the navbar
   function updateNavbar() {
     const userEmail = localStorage.getItem('userEmail'); // Retrieve user email from localStorage
+    const userType = localStorage.getItem('userType'); // Retrieve userType from localStorage
     const navList = document.querySelector('nav ul'); // Get the navigation list
 
     // Remove login and sign-up links if the user is logged in
@@ -88,6 +89,18 @@
       const myBlogPostsListItem = document.createElement('li');
       myBlogPostsListItem.appendChild(myBlogPostsLink);
       navList.appendChild(myBlogPostsListItem);
+    }
+
+    // Check and add Admin Dashboard Link if the user is a blog admin
+    let adminDashboardLink = document.querySelector('.admin-dashboard-link');
+    if (!adminDashboardLink && userType === 'blog-admin') {
+      adminDashboardLink = document.createElement('a');
+      adminDashboardLink.href = "http://localhost:8201/api/admin";
+      adminDashboardLink.textContent = 'Admin Dashboard';
+      adminDashboardLink.classList.add('dynamic-link', 'admin-dashboard-link');
+      const adminDashboardListItem = document.createElement('li');
+      adminDashboardListItem.appendChild(adminDashboardLink);
+      navList.appendChild(adminDashboardListItem);
     }
 
     // Check and add Logout Link if the user is logged in
