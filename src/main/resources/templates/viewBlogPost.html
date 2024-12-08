@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -41,21 +41,21 @@
 </div>
 
 <!-- Hidden input to store postId -->
-<input type="hidden" id="postId" value="49">
+<input type="hidden" id="postId" th:value="${postId}">
 
 <!-- JavaScript for dynamic content -->
 <script>
     // Get the postId from the hidden input
     const postId = document.getElementById("postId").value;
 
-    alert(postId);
+    //alert(postId);
 
-    console.log("Post ID from hidden input:", postId); // Debugging
+    //console.log("Post ID from hidden input:", postId); // Debugging
 
     document.addEventListener("DOMContentLoaded", async () => {
         const apiUrl = `http://localhost:8201/api/post/get-by-id/${postId}`;
-        alert(apiUrl);
-        console.log("Fetching blog post from API:", apiUrl);
+        //alert(apiUrl);
+        //console.log("Fetching blog post from API:", apiUrl);
 
         try {
             const response = await fetch(apiUrl, {
