@@ -238,7 +238,7 @@
         console.error("Error fetching blog posts:", error);
     }
 }
-    // Populate the table with blog posts
+   // Populate the table with blog posts
     function populateBlogPosts(posts) {
         const tableBody = document.getElementById('blog-posts-table');
         tableBody.innerHTML = ''; // Clear existing rows
@@ -255,6 +255,9 @@
             const row = document.createElement('tr');
             row.id = `post-${post.id}`;
 
+            //alert("Inside populateBlogPosts");
+            //alert(row.id);
+
             // Use correct field names based on the API response
             row.innerHTML = `
                 <td>${post.title || "No Title"}</td> <!-- Handle null titles -->
@@ -262,25 +265,17 @@
                 <td>${post.category ? post.category.name : "Uncategorized"}</td> <!-- Access category name -->
                 <td class="status ${post.isDeleted ? 'deleted' : 'active'}">${post.isDeleted ? 'Deleted' : 'Active'}</td>
                 <td><button class="btn btn-view" onclick="viewPost(${post.id})">View</button></td>
-                <td><button class="btn btn-edit" onclick="editPost(${post.id})">Edit</button></td>
-                <td><button class="btn btn-delete" onclick="deletePost(${post.id})">Delete</button></td>
+                <td><button class="btn btn-view" onclick="editPost(${post.id})">Edit</button></td>
+                <td><button class="btn btn-view" onclick="deletePost(${post.id})">Delete</button></td>
             `;
+
             tableBody.appendChild(row);
         });
     }
 
-
-
     // Additional functions for search, filter, and pagination
     function searchBlogPosts() {
         //alert("Inside searchBlogPosts");
-
-        /*const searchElement = document.getElementById('search');
-        if (!searchElement)
-        {
-            alert("Search input not found!");
-            return;
-        }*/
 
         const searchQuery = document.getElementById('search').value;
         const category = document.getElementById('category').value;
@@ -300,7 +295,11 @@
         getBlogPosts(searchQuery,category);
 
     }
+
+    //function to view a post
     function viewPost(postId) {
+
+        alert(`Viewing Post ID: ${postId}`);
         const token = localStorage.getItem('authToken');
         if (!token) {
             alert("Please login to view the post!");
@@ -310,7 +309,41 @@
         }
 
         // Redirect to the post view page with the post ID
-        window.location.href = `http://localhost:8201/api/viewBlogPost/${postId}`;
+        //window.location.href = `http://localhost:8201/api/viewBlogPost/${postId}`;
+        //alert(window.location.href);
+
+        const targetUrl = `http://localhost:8201/api/viewBlogPost/${postId}`;
+        console.log(`Redirecting to: ${targetUrl}`);
+        alert(`Redirecting to: ${targetUrl}`);
+        window.location.href = targetUrl;
+    }
+
+    //edit a post
+    function editPost(postId) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert("Please login to view the post!");
+            localStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }
+
+        // Redirect to the post view page with the post ID
+        window.location.href = `http://localhost:8201/api/editBlogPost/${postId}`;
+    }
+
+    //delete a post
+    function deletePost(postId) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert("Please login to view the post!");
+            localStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }
+
+        // Redirect to the post view page with the post ID
+        window.location.href = `http://localhost:8201/api/deleteBlogPost/${postId}`;
     }
 
     function navigatePagination(direction) {

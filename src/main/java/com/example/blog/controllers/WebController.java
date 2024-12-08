@@ -10,11 +10,9 @@ import com.example.blog.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 //import org.springframework.beans.factory.annotation.Autowired; // Import this for constructor injection
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,9 +87,26 @@ public class WebController {
         return "userBlogList";  // This will look for userBlogList.html in the templates folder
     }
 
-    @GetMapping("/viewBlogPost/{id}")
+    /*@GetMapping("/viewBlogPost/{id}")
     public String viewBlogPost() {
-        return "viewBlogPost";  // This will look for userBlogList.html in the templates folder
+        return "viewBlogPost";  // This will look for viewBlogPost.html in the templates folder
+    }*/
+
+    @GetMapping("/viewBlogPost/{id}")
+    public String viewBlogPost(@PathVariable Long id, Model model) {
+        // Pass the post ID to the HTML via the model
+        model.addAttribute("postId", id);
+        return "viewBlogPost"; // This will render viewBlogPost.html from the templates folder
+    }
+
+    @GetMapping("/editBlogPost/{id}")
+    public String editBlogPost() {
+        return "editBlogPost";  // This will look for editBlogPost.html in the templates folder
+    }
+
+    @GetMapping("/deleteBlogPost/{id}")
+    public String deleteBlogPost() {
+        return "deleteBlogPost";  // This will look for deleteBlogPost.html in the templates folder
     }
 
     //Sign-up page

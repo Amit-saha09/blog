@@ -2,43 +2,13 @@
 <html lang="en">
 
 <head>
-    <!-- Meta Tags for charset and responsive design -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Title of the blog page displayed on the browser tab -->
     <title>Blog Post</title>
-
-    <!-- Linking external CSS stylesheet for styles -->
-    <link rel="stylesheet" href="blogview.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
-        }
-
-        .navbar {
-            background-color: #333;
-            padding: 10px;
-        }
-
-        .navbar .logo {
-            color: #fff;
-            font-size: 20px;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
         }
 
         .blog-post {
@@ -50,139 +20,63 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .name-poster {
-            width: 50px;
-            height: 50px;
-            background-color: #007bff;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .post-title {
-            margin: 15px 0;
-            font-size: 28px;
+        h1 {
             color: #333;
+            font-size: 24px;
         }
 
-        .post-body {
-            font-size: 16px;
+        p {
             color: #555;
+            font-size: 16px;
             line-height: 1.6;
-        }
-
-        .footer {
-            margin-top: 20px;
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
-
-        .footer a {
-            color: #fff;
-            text-decoration: none;
         }
     </style>
 </head>
 
 <body>
-<!-- Main Navigation Bar -->
-<nav class="navbar">
-    <div class="container">
-        <a href="#" class="logo">BlogPost</a>
-        <ul class="nav-links">
-            <li><a href="Home.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="UserProfile.html">Profile</a></li>
-            <li><a href="logout.html">Logout</a></li>
-        </ul>
-    </div>
-</nav>
-
-<!-- Blog Post Section -->
-<div class="container blog-post" id="single-post">
-    <!-- Dynamic Content Goes Here -->
-    <div class="post">
-        <div class="post-header">
-            <span class="name-poster" id="author-initials">AS</span>
-            <div class="post-info">
-                <span class="author-name" id="author-name">Amit Saha</span>
-                <span class="post-date" id="post-date">Published • Date</span>
-            </div>
-        </div>
-        <div class="post-content">
-            <h1 class="post-title" id="post-title">Post Title</h1>
-            <div class="post-body" id="post-body">
-                <p>Loading content...</p>
-            </div>
-        </div>
-    </div>
+<!-- Blog Post Container -->
+<div class="blog-post">
+    <h1 id="post-title">Loading...</h1>
+    <p id="post-body">Loading content...</p>
 </div>
 
-<!-- Footer Section -->
-<footer class="footer">
-    <div class="container">
-        <p>&copy; 2024 BlogPost. All rights reserved.</p>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy</a> |
-            <a href="terms.html">Terms</a> |
-            <a href="http://localhost:8201/api/contact-us">Contact Us</a>
-        </div>
-    </div>
-</footer>
+<!-- Hidden input to store postId -->
+<input type="hidden" id="postId" value="49">
 
-<!-- JavaScript for Dynamic Content -->
+<!-- JavaScript for dynamic content -->
 <script>
+    // Get the postId from the hidden input
+    const postId = document.getElementById("postId").value;
+
+    alert(postId);
+
+    console.log("Post ID from hidden input:", postId); // Debugging
+
     document.addEventListener("DOMContentLoaded", async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get("id") || 1; // Default to ID 1 if no parameter
         const apiUrl = `http://localhost:8201/api/post/get-by-id/${postId}`;
+        alert(apiUrl);
+        console.log("Fetching blog post from API:", apiUrl);
 
         try {
-            // Fetch post data
             const response = await fetch(apiUrl, {
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("authToken") || ""}`,
-                },
+                    "Authorization": `Bearer ${localStorage.getItem("authToken") || ""}`
+                }
             });
 
             if (response.ok) {
                 const data = await response.json();
-                const post = data.obj;
 
-                // Update post content dynamically
-                document.getElementById("author-initials").textContent = getInitials(post.user.firstName, post.user.lastName);
-                document.getElementById("author-name").textContent = `${post.user.firstName} ${post.user.lastName}`;
-                document.getElementById("post-date").textContent = `Published • ${new Date(post.user.createdAt).toDateString()}`;
-                document.getElementById("post-title").textContent = post.description || "Untitled";
-                document.getElementById("post-body").innerHTML = `
-                        <p>${post.description || "No content available."}</p>
-                    `;
+                // Populate the blog content dynamically
+                document.getElementById("post-title").textContent = data.obj.title || "No Title Available";
+                document.getElementById("post-body").textContent = data.obj.description || "No Content Available";
             } else {
-                console.error("Failed to fetch post data:", response.statusText);
-                document.getElementById("post-body").innerHTML = "<p>Failed to load the post content.</p>";
+                console.error("Error fetching post data:", response.statusText);
             }
         } catch (error) {
-            console.error("Error:", error);
-            document.getElementById("post-body").innerHTML = "<p>Error loading the post content.</p>";
+            console.error("Error occurred while fetching post:", error);
         }
     });
-
-    // Helper function to get user initials
-    function getInitials(firstName, lastName) {
-        return `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
-    }
 </script>
 </body>
 

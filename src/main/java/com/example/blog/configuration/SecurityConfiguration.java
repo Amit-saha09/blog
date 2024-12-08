@@ -52,6 +52,8 @@ public class SecurityConfiguration {
                                         "/category/get-list",
                                         "/category/create-category",
                                         "/viewBlogPost/{id}",
+                                        "/editBlogPost/{id}",
+                                        "/deleteBlogPost/{id}",
                                         "/post/get-by-id/{id}",
                                         "/error",
                                         "*.css",

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Blog Post</title>
+    <link rel="stylesheet" href="editpost.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<header class="navbar">
+    <div class="logo">BlogPost</div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="http://localhost:8201/api/home">Home</a></li>
+            <li><a href="http://localhost:8201/api/about-us">About</a></li>
+            <li><a href="http://localhost:8201/api/userBlogList">Blog Posts</a></li>
+            <li><a href="http://localhost:8201/api/log-out">Log Out</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="content">
+        <h1 class="form-title">Edit Blog Post</h1>
+        <p class="form-description">Update your blog post by editing the fields below.</p>
+
+        <form id="editPostForm" class="edit-post-form">
+            <div class="form-group">
+                <label for="title">Post Title <span class="required">*</span></label>
+                <input type="text" id="title" name="title" value="Existing Title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category <span class="required">*</span></label>
+                <select id="category" name="category" required>
+                    <option value="">Select a category</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content <span class="required">*</span></label>
+                <textarea id="content" name="content" rows="6" required>Existing content...</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status <span class="required">*</span></label>
+                <select id="status" name="status" required>
+                    <option value="Draft" selected>Draft</option>
+                    <option value="Published">Published</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Post</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Fetch categories and populate the dropdown
+    async function loadCategories() {
+        try {
+            const response = await fetch('http://localhost:8201/api/category/get-list');
+            const data = await response.json();
+            const categorySelect = document.getElementById('category');
+
+            if (data.page && data.page.content) {
+                data.page.content.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            } else {
+                alert('No categories found.');
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+            alert('Failed to load categories.');
+        }
+    }
+
+    // Handle form submission for updating a post
+    document.getElementById('editPostForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('You must be logged in to update a post!');
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }
+
+        //const postId = localStorage.getItem('editPostId'); // Assume post ID is stored in localStorage
+        const title = document.getElementById('title').value;
+        const categoryId = document.getElementById('category').value;
+        const description = document.getElementById('content').value;
+        const status = document.getElementById('status').value;
+
+        const postData = {
+            userEmail: localStorage.getItem('userEmail'),
+            title: title,
+            description: description,
+            categoryId: parseInt(categoryId),
+
+        };
+
+        try {
+            const response = await fetch('http://localhost:8201/api/post/update-post', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(postData)
+            });
+
+            if (response.ok) {
+                alert('Post updated successfully!');
+                window.location.href = "http://localhost:8201/api/userBlogList";
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to update post: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Error updating post:', error);
+            alert('Failed to update post.');
+        }
+    });
+
+    // Initialize categories on page load
+    document.addEventListener('DOMContentLoaded', loadCategories);
+</script>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2024 BlogPost. All rights reserved.</p>
+</footer>
+</body>
+</html>

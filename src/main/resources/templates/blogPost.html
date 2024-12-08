@@ -253,22 +253,25 @@
     // Additional functions for search, filter, and pagination
     function searchBlogPosts() {
         //alert("Inside searchBlogPosts");
-        const searchElement = document.getElementById('search');
+        /*const searchElement = document.getElementById('search');
         if (!searchElement)
         {
             alert("Search input not found!");
             return;
-        }
+        }*/
         const searchQuery = document.getElementById('search').value;
+        const category = document.getElementById('category').value;
         //alert(searchQuery);
-        getBlogPosts(searchQuery,"");
+
+        getBlogPosts(searchQuery,category);
     }
 
     function filterBlogPosts() {
         //alert("Inside filterBlogPosts");
         const category = document.getElementById('category').value;
+        const searchQuery = document.getElementById('search').value;
         //alert(category);
-        getBlogPosts("",category);
+        getBlogPosts(searchQuery,category);
     }
     function viewPost(postId) {
         const token = localStorage.getItem('authToken');
