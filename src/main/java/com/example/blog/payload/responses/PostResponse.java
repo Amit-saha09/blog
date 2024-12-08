@@ -17,6 +17,7 @@ public class PostResponse extends IdHolderRequestBodyDTO {
 
     private User user;
 
+    private String title;
     private String description;
 
     private Category category;
