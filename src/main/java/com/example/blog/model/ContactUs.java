@@ -20,5 +20,7 @@ public class ContactUs extends AuditModel<Long> {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    private String email;
+
     private boolean reviewed;
 }

@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/blog?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: postgres
-    password: InXs@123
+    password: 123321
     driver-class-name: org.postgresql.Driver
     hikari:
       connectionTimeout: 30000
