@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                                         "/auth/reset-password",
                                         "/auth/provide-reset-password",
                                         "/auth/regenerate/token-for-user",
+                                        "/post/search-post",
                                         "/auth/confirm-account",
                                         "/category/get-list",
                                         "/category/create-category",
