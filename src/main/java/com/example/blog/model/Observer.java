@@ -1,10 +1,8 @@
-/****author-->Simi****/
+//***author Simi****
 package com.example.blog.model;
 
-
-// interface for Observer
+// Observer interface
 public interface Observer
 {
-    void update(String message);
+    void update(String postTitle);
 }
-

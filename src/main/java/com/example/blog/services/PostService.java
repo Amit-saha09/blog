@@ -3,6 +3,7 @@ package com.example.blog.services;
 import com.example.blog.helper.Response;
 import com.example.blog.helper.messages.CommonMessageConstants;
 import com.example.blog.model.Category;
+import com.example.blog.model.Observer;
 import com.example.blog.model.Post;
 import com.example.blog.model.User;
 import com.example.blog.payload.requests.PostRequest;
@@ -13,6 +14,7 @@ import com.example.blog.repositories.PostRepository;
 import com.example.blog.repositories.ServiceRepository;
 import com.example.blog.repositories.UserRepository;
 import com.example.blog.services.iService.IPostService;
+import org.apache.catalina.core.ApplicationContext;
 import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,22 +41,66 @@ public class PostService extends
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
+
+    private final List<Observer> observers = new ArrayList<>();  // List to hold observers
+
+
     // Private constructor for Singleton
-    private PostService(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, CategoryRepository categoryRepository) {
+    private PostService
+    (PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository,
+     CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+
     }
 
     // Public method to get the Singleton instance
-    public static synchronized PostService getInstance(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, CategoryRepository categoryRepository) {
+    public static synchronized PostService getInstance
+    (PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository,
+                                                       CategoryRepository categoryRepository) {
         if (instance == null) {
-            instance = new PostService(postRepository, modelMapper,userRepository, categoryRepository);
+            instance = new PostService
+                    (postRepository, modelMapper,userRepository, categoryRepository);
         }
         return instance;
     }
 
+    //***author*** Simi
+    //method to add, remove and notify all the users
+
+    // Add an observer (user)
+    public void addObserver(Observer observer) {
+        if (!observers.contains(observer))
+            {observers.add(observer);}
+    }
+
+    // Remove an observer (user)
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    //notify the observers
+    public void notifyObservers(String postTitle) {
+        List<User> subscribedUsers = userRepository.findByIsActivatedTrue();
+
+        //if no active users
+        if (subscribedUsers.isEmpty()) {
+            System.out.println("No active users to notify.");
+            return;
+        }
+
+        // Add each active user as an observer
+        for (Observer user : subscribedUsers) {
+            addObserver(user);  // Adding observer
+        }
+
+        // Notify all observers (users)
+        for (Observer observer : observers) {
+            observer.update(postTitle);  // Calling the update() method of the observer (user)
+        }
+    }
 
     protected PostRepository getPostRepository() {
         return postRepository;
@@ -99,10 +146,26 @@ public class PostService extends
             post.setImage(postRequest.getImage());
             Post postSave = postRepository.save(post);
 
+
             PostResponse postResponse = new PostResponse();
             modelMapper.map(postSave, postResponse);
             response.setObj(postResponse);
-            return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
+            //return new ResponseEntity<>(getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
+
+            // Create the ResponseEntity with status 200 OK
+            ResponseEntity<Response<PostResponse>> responseEntity = new ResponseEntity<>(
+                    getSuccessResponse(CommonMessageConstants.SAVED_EN, response), HttpStatus.OK);
+
+            //*****author : Simi*****
+            // Check if the response status is 200 OK
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                // Notify observers if response is 200 OK
+                notifyObservers(postRequest.getTitle());
+            }
+
+            return responseEntity;
+
+
         }catch(Exception ex){
             logger.error(CommonMessageConstants.NOT_SAVED_EN, ex);
             ex.printStackTrace();

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Blog</title>
+  <link rel="stylesheet" href="blogpost.css">
+</head>
+
+<body>
+<nav class="navbar">
+  <div class="container">
+    <a href="#" class="logo">BlogPost</a>
+    <ul class="nav-links">
+      <li><a href="http://localhost:8201/api/home">Home</a></li>
+      <li><a href="http://localhost:8201/api/about-us">About</a></li>
+      <li><a href="UserProfile.html">Profile</a></li>
+      <li><a href="http://localhost:8201/api/log-out">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="search-container">
+  <input type="text" id="search-box" placeholder="Search for blog posts..." aria-label="Search blog posts">
+
+  <!--<select id="category-select" aria-label="Search categories">
+    <option value="">Select Category</option>
+    <option value="web-dev">Web Development</option>
+    <option value="blogging">Blogging Tips</option>
+    <option value="programming">Programming Languages</option>
+    </select>-->
+
+    <div class="form-group">
+      <label for="category">Category <span class="required">*</span></label>
+      <select id="category" name="category" required onchange="filterBlogPosts()">
+        <option value="">Select a category</option>
+      </select>
+    </div>
+
+
+  <input type="text" id="search" placeholder="Search by author email..." aria-label="Search by author email">
+  <button type="button" onclick="searchBlogPosts()">Search</button>
+</div>
+
+<h2>List of Blog Posts</h2>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Date Created</th>
+    <th>Category</th>
+    <th>Status</th>
+    <th>View</th>
+  </tr>
+  </thead>
+  <tbody id="blog-posts-table">
+  <!-- Dynamic content will be inserted here -->
+  </tbody>
+</table>
+
+<div class="blog-feed" id="blog">
+  <div class="post" data-category="web-dev">
+    <div class="post-header">
+      <span class="name-poster">AS</span>
+      <div class="post-info">
+        <span class="author-name">Amit Saha</span>
+        <span class="post-date">Published • December 3, 2024</span>
+        <span class="author-email">amit@example.com</span>
+      </div>
+    </div>
+    <div class="post-content">
+      <h2>How AngularJS Makes Web Development Easier</h2>
+      <p>AngularJS simplifies web development with features like two-way data binding and dependency injection. This article explores how AngularJS can reduce boilerplate code and improve app scalability.</p>
+      <a href="blogview.html" class="read-more">Read More</a>
+      <p class="post-description">Amit Saha is a web developer with a passion for JavaScript frameworks, especially AngularJS.</p>
+    </div>
+  </div>
+
+  <div class="post" data-category="blogging">
+    <div class="post-header">
+      <span class="name-poster">SM</span>
+      <div class="post-info">
+        <span class="author-name">Simi Mathew</span>
+        <span class="post-date">Published • December 2, 2024</span>
+        <span class="author-email">simi@example.com</span>
+      </div>
+    </div>
+    <div class="post-content">
+      <h2>Acute interest in JavaScript, Spring Boot, and Scalable System Solutions</h2>
+      <p>An Integration Developer with expertise in JavaScript, Spring Boot, and front-end technologies such as HTML and CSS. Specializes in creating seamless integrations that connect disparate systems and streamline workflows. Proficient in developing robust APIs and integrating back-end services with dynamic, responsive front-end interfaces. With a strong focus on building scalable solutions using Spring Boot and delivering interactive user experiences through JavaScript, this role aims to automate processes, improve system interoperability, and deliver efficient end-to-end solutions that drive business innovation.</p>
+      <a href="blogview.html" class="read-more">Read More</a>
+      <p class="post-description">Simi Mathew is an Integration Developer with expertise in JavaScript, Spring Boot, and front-end technologies such as HTML and CSS.</p>
+    </div>
+  </div>
+
+  <div class="post" data-category="programming">
+    <div class="post-header">
+      <span class="name-poster">VP</span>
+      <div class="post-info">
+        <span class="author-name">Vedant Patel</span>
+        <span class="post-date">Published • December 1, 2024</span>
+        <span class="author-email">vedant@example.com</span>
+      </div>
+    </div>
+    <div class="post-content">
+      <h2>Understanding JavaScript ES6 Features</h2>
+      <p>JavaScript ES6 introduced features like arrow functions, template literals, and promises. Learn how these features can simplify coding and improve your productivity.</p>
+      <a href="blogview.html" class="read-more">Read More</a>
+      <p class="post-description">Vedant Patel is a software engineer with hands of expertise in modern web technologies.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function loadCategoriesPublic()
+    {
+        alert("Inside load categories");
+
+        const token = localStorage.getItem('authToken');
+        alert(`Load categories Token: ${token}`);
+
+        /*if (!token) {
+            document.getElementById("responseMessage").innerText =
+                "Error: You must be logged in to Create a Post!";
+
+                //alert("Please login to view the User Blog List!");
+
+                 //window.location.href = "http://localhost:8201/api/auth/authenticate";
+
+                 window.location.href = "http://localhost:8201/api/login";
+
+                //redirects to login page if the user is not logged in
+                localStorage.setItem('redirectAfterLogin', window.location.href);
+
+                window.location.href = "http://localhost:8201/api/login";
+
+                setTimeout(() =>
+                {
+                    window.location.href = "http://localhost:8201/api/login"; // Redirect to login
+               }, 2000);
+
+
+                //setTimeout(() =>
+                //{
+                //window.location.href = "http://localhost:8201/api/auth/authenticate"; // Redirect to login
+               //}, 2000);
+
+            return;
+        }*/
+
+        try
+        {
+          const response = await fetch('http://localhost:8201/api/category/get-list');
+          const data = await response.json();
+          const categorySelect = document.getElementById('category');
+
+          if (data.page && data.page.content) {
+            data.page.content.forEach(category => {
+              const option = document.createElement('option');
+              option.value = category.id;
+              option.textContent = category.name;
+              categorySelect.appendChild(option);
+            });
+          } else {
+            alert('No categories found.');
+          }
+        } catch (error)
+        {
+          console.error('Error fetching categories:', error);
+          alert('Failed to load categories.');
+        }
+      }
+
+
+  async function getBlogPosts(searchQuery = "", category = "") {
+    alert("Inside getBlogPosts");
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        window.location.href = "http://localhost:8201/api/login";
+        return;
+    }
+
+    const userEmail = localStorage.getItem('userEmail');
+    const description = searchQuery;
+    const categoryId = category;
+    const payload = {
+        userEmail: userEmail,
+        description: description,
+        categoryId: categoryId ? parseInt(categoryId) : null
+    };
+
+    try {
+        const response = await fetch(`http://localhost:8201/api/post/search-post`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData);  // Inspect the response structure in console
+
+            if (responseData.success && responseData.items) {
+                populateBlogPosts(responseData.items);
+
+            } else {
+                console.error("No blog posts found or invalid response structure");
+            }
+        } else {
+            console.error("Failed to fetch blog posts");
+        }
+    } catch (error) {
+        console.error("Error fetching blog posts:", error);
+    }
+}
+
+  // Populate the table with blog posts
+    function populateBlogPosts(posts) {
+        const tableBody = document.getElementById('blog-posts-table');
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        if (!posts || posts.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7">No blog posts available</td></tr>';
+            return;
+        }
+
+        //alert("Inside populateBlogPosts");
+        //alert(JSON.stringify(posts, null, 2)); // For debugging
+
+        posts.forEach(post => {
+            const row = document.createElement('tr');
+            row.id = `post-${post.id}`;
+
+            //alert("Inside populateBlogPosts");
+            //alert(row.id);
+
+            // Use correct field names based on the API response
+            row.innerHTML = `
+                <td>${post.title || "No Title"}</td> <!-- Handle null titles -->
+                <td>${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Not Available"}</td> <!-- Handle null createdAt -->
+                <td>${post.category ? post.category.name : "Uncategorized"}</td> <!-- Access category name -->
+                <td class="status ${post.isDeleted ? 'deleted' : 'active'}">${post.isDeleted ? 'Deleted' : 'Active'}</td>
+                <td><button class="btn btn-view" onclick="viewPost(${post.id})">View</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Additional functions for search, filter, and pagination
+    function searchBlogPosts() {
+        //alert("Inside searchBlogPosts");
+        const searchElement = document.getElementById('search');
+        if (!searchElement)
+        {
+            alert("Search input not found!");
+            return;
+        }
+        const searchQuery = document.getElementById('search').value;
+        //alert(searchQuery);
+        getBlogPosts(searchQuery,"");
+    }
+
+    function filterBlogPosts() {
+        //alert("Inside filterBlogPosts");
+        const category = document.getElementById('category').value;
+        //alert(category);
+        getBlogPosts("",category);
+    }
+    function viewPost(postId) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert("Please login to view the post!");
+            localStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }
+
+        // Redirect to the post view page with the post ID
+        window.location.href = `http://localhost:8201/api/viewBlogPost/${postId}`;
+    }
+
+    function navigatePagination(direction) {
+        console.log(`Pagination: ${direction}`); // Placeholder
+    }
+
+    //view the post
+    function viewPost(postId) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert("Please login to view the post!");
+            localStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }
+
+        // Redirect to the post view page with the post ID
+        window.location.href = `http://localhost:8201/api/viewBlogPost/${postId}`;
+    }
+
+    // Load blog posts on page load
+    document.addEventListener('DOMContentLoaded', () => {
+    getBlogPosts();
+    loadCategoriesPublic(); // Ensure categories load on page load
+});
+</script>
+</body>
+
+</script>
+
+
+
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2024 BlogPost. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy</a> |
+      <a href="terms.html">Terms</a> |
+      <a href="contact.html">Contact Us</a>
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>

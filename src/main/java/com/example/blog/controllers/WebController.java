@@ -3,10 +3,8 @@ package com.example.blog.controllers;
 
 import com.example.blog.helper.Response;
 import com.example.blog.payload.requests.AuthRequest;
-import com.example.blog.payload.requests.BlogPostRequest;
 import com.example.blog.payload.requests.FaqRequest;
 import com.example.blog.payload.requests.RegisterRequest;
-import com.example.blog.payload.responses.BlogPostResponse;
 import com.example.blog.payload.responses.LoginResponse;
 import com.example.blog.services.AuthService;
 import jakarta.validation.Valid;
@@ -14,6 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+//import org.springframework.beans.factory.annotation.Autowired; // Import this for constructor injection
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired; // Import this for constructor injection
 import org.springframework.http.HttpStatus;
@@ -23,7 +26,7 @@ import org.springframework.validation.BindingResult;
 
 
 import com.example.blog.services.FaqService;
-import com.example.blog.services.BlogPostService;
+//import com.example.blog.services.BlogPostService;
 import com.example.blog.payload.FaqResponse;
 
 @Controller
@@ -32,21 +35,24 @@ public class WebController {
     // Declare a private field for the FaqService instance
     private final FaqService faqService;
     private final AuthService authService; // Inject AuthService for login functionality
-    private final BlogPostService blogPostService;
-    //private final UserService userService; // Inject UserService for sign-up functionality
+
 
     // Constructor injection: Spring will inject the FaqService instance here
-    @Autowired
-    public WebController(FaqService faqService, AuthService authService,BlogPostService blogPostService ) {
+    public WebController(FaqService faqService, AuthService authService) {
         this.faqService = faqService;  // Assigning the injected FaqService to the field
         this.authService = authService; // Assign AuthService to the field
-        this.blogPostService = blogPostService;
         //this.userService = userService;  // Assigning the injected UserService to the field
     }
 
     @GetMapping("/home")
     public String homePage() {
         return "home";  // This will look for home.html in the templates folder
+    }
+
+    //Contact US page
+    @GetMapping("/blog-post")
+    public String blogPostPage() {
+        return "blogPost";  // This will look for blogPost.html in the templates folder
     }
 
     @GetMapping("/create-faq")

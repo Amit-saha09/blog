@@ -1,0 +1,154 @@
+/* General Reset for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Arial', sans-serif; /* Use a clean, sans-serif font */
+    line-height: 1.6; /* Improve readability with line spacing */
+    background-color: #f4f4f4; /* Light gray background for the page */
+    color: #333; /* Dark text color for contrast */
+}
+
+/* Navigation Bar Styles */
+.navbar {
+    background-color: #007BFF; /* Dark background for the navbar */
+    padding: 10px 0; /* Vertical padding for spacing */
+}
+
+.navbar .container {
+    max-width: 1200px; /* Limit content width */
+    margin: 0 auto; /* Center align the navbar */
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out items evenly */
+    align-items: center; /* Vertically align items */
+    padding: 0 20px; /* Horizontal padding for spacing */
+}
+
+.navbar .logo {
+    color: white; /* White text for logo */
+    font-size: 24px; /* Large font for logo */
+    font-weight: bold; /* Bold font for emphasis */
+    text-decoration: none; /* Remove underline */
+}
+
+.navbar .nav-links {
+    list-style: none; /* Remove bullet points */
+    display: flex; /* Use flexbox for horizontal layout */
+}
+
+.navbar .nav-links li {
+    margin-left: 20px; /* Space out the navigation links */
+}
+
+.navbar .nav-links a {
+    color: white; /* White color for links */
+    text-decoration: none; /* Remove underlines from links */
+    font-size: 16px; /* Set font size for readability */
+    transition: color 0.3s ease; /* Smooth color transition for hover effect */
+}
+
+.navbar .nav-links a:hover {
+    color: #f4a261; /* Change link color on hover */
+}
+
+/* Blog Post Section */
+.container {
+    width: 90%; /* Set width to 90% of the screen */
+    max-width: 1200px; /* Max content width */
+    margin: 40px auto; /* Center the content with top/bottom margin */
+    padding: 0 20px; /* Add horizontal padding */
+}
+
+.blog-post {
+    background-color: #fff; /* White background for the blog post */
+    padding: 40px; /* Add padding inside the blog post */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    margin-bottom: 40px; /* Bottom margin for spacing */
+    border-radius: 8px; /* Rounded corners for the post */
+}
+
+.post-header {
+    display: flex; /* Use flexbox to arrange the post header */
+    align-items: center; /* Vertically align items */
+    margin-bottom: 20px; /* Space between header and content */
+}
+
+.name-poster {
+    background-color: #333; /* Dark background for the author's initials */
+    color: white; /* White text */
+    width: 40px; /* Fixed width for the circle */
+    height: 40px; /* Fixed height for the circle */
+    border-radius: 50%; /* Make the initials circular */
+    display: flex; /* Use flexbox to center text */
+    align-items: center; /* Vertically center the initials */
+    justify-content: center; /* Horizontally center the initials */
+    font-weight: bold; /* Bold text */
+    margin-right: 15px; /* Space between initials and text */
+}
+
+.post-info {
+    font-size: 14px; /* Smaller font for author and date */
+}
+
+.post-info .author-name {
+    font-weight: bold; /* Bold the author name */
+    margin-right: 10px; /* Space between author name and date */
+}
+
+.post-info .post-date {
+    color: #777; /* Lighter color for the date */
+}
+
+.post-title {
+    font-size: 2.5em; /* Large title size for impact */
+    color: #333; /* Dark color for the title */
+    margin-bottom: 20px; /* Space below the title */
+}
+
+.post-body p {
+    font-size: 18px; /* Readable font size for body text */
+    line-height: 1.8; /* Line height for better text readability */
+    margin-bottom: 20px; /* Space between paragraphs */
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #007BFF; /* Dark background for the footer */
+    color: white; /* White text */
+    text-align: center; /* Center align text */
+    padding: 20px 0; /* Vertical padding for spacing */
+    margin-top: 40px; /* Space between content and footer */
+}
+
+.footer .container {
+    max-width: 1200px; /* Max content width */
+    margin: 0 auto; /* Center the footer */
+    padding: 0 20px; /* Horizontal padding for spacing */
+    display: flex; /* Flexbox layout */
+    justify-content: space-between; /* Space out footer content */
+    align-items: center; /* Vertically align content */
+    text-align: left; /* Align text to the left within the footer */
+}
+
+.footer p {
+    font-size: 14px; /* Smaller font size for copyright */
+}
+
+.footer-links {
+    margin-top: 10px; /* Space above footer links */
+}
+
+.footer-links a {
+    color: white; /* White color for links */
+    text-decoration: none; /* Remove underlines from links */
+    margin: 0 10px; /* Space out the links */
+    font-size: 14px; /* Set font size */
+}
+
+.footer-links a:hover {
+    color: #f4a261; /* Change link color on hover */
+}

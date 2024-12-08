@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                         authorize.requestMatchers(
                                         "/auth/authenticate",
                                         "/home",
+                                        "/blog-post",
                                         "/login",
                                         "/sign-up",
                                         "/userBlogList",
