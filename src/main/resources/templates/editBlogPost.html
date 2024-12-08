@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +20,6 @@
     </nav>
 </header>
 
-<!-- Main Content -->
 <div class="container">
     <div class="content">
         <h1 class="form-title">Edit Blog Post</h1>
@@ -29,11 +28,11 @@
         <form id="editPostForm" class="edit-post-form">
             <div class="form-group">
                 <label for="title">Post Title <span class="required">*</span></label>
-                <input type="text" id="title" name="title" value="Existing Title" required>
+                <input type="text" id="title" name="title" value="" required>
             </div>
 
             <div class="form-group">
-                <label for="category">Category <span class="required">*</span></label>
+                <label for="category">Category</label>
                 <select id="category" name="category" required>
                     <option value="">Select a category</option>
                 </select>
@@ -41,13 +40,13 @@
 
             <div class="form-group">
                 <label for="content">Content <span class="required">*</span></label>
-                <textarea id="content" name="content" rows="6" required>Existing content...</textarea>
+                <textarea id="content" name="content" rows="6" required></textarea>
             </div>
 
             <div class="form-group">
                 <label for="status">Status <span class="required">*</span></label>
                 <select id="status" name="status" required>
-                    <option value="Draft" selected>Draft</option>
+                    <option value="Draft">Draft</option>
                     <option value="Published">Published</option>
                 </select>
             </div>
@@ -57,61 +56,116 @@
                 <button type="reset" class="btn btn-secondary">Reset</button>
                 <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Post</button>
             </div>
+            <!-- Hidden input to store postId -->
+            <input type="hidden" id="postId" th:value="${postId}">
         </form>
     </div>
 </div>
 
 <script>
-    // Fetch categories and populate the dropdown
-    async function loadCategories() {
-        try {
-            const response = await fetch('http://localhost:8201/api/category/get-list');
-            const data = await response.json();
-            const categorySelect = document.getElementById('category');
 
-            if (data.page && data.page.content) {
-                data.page.content.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.id;
-                    option.textContent = category.name;
-                    categorySelect.appendChild(option);
-                });
-            } else {
-                alert('No categories found.');
-            }
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-            alert('Failed to load categories.');
+    // Populate categories
+    async function loadCategories() {
+
+        /*const token = localStorage.getItem('authToken');
+        alert(token);
+        if (!token) {
+            alert("Please login to view the post!");
+            localStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = "http://localhost:8201/api/login";
+            return;
+        }*/
+
+        try
+        {
+          const response = await fetch('http://localhost:8201/api/category/get-list');
+          const data = await response.json();
+          const categorySelect = document.getElementById('category');
+
+          if (data.page && data.page.content) {
+            data.page.content.forEach(category => {
+              const option = document.createElement('option');
+              option.value = category.id;
+              option.textContent = category.name;
+              categorySelect.appendChild(option);
+            });
+          } else {
+            alert('No categories found.');
+          }
+        } catch (error)
+        {
+          console.error('Error fetching categories:', error);
+          alert('Failed to load categories.');
         }
     }
 
-    // Handle form submission for updating a post
+    // Fetch post details and populate form
+    async function fetchPostDetails() {
+        const postId = document.getElementById('postId').value;
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('You must be logged in to edit a post!');
+            window.location.href = 'http://localhost:8201/api/login';
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8201/api/post/get-by-id/${postId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const post = data.obj;
+
+                document.getElementById('title').value = post.title || '';
+                document.getElementById('content').value = post.description || '';
+                //document.getElementById('status').value = post.status || 'Draft';
+
+                //loadCategories(post.categoryId);
+            } else {
+                console.error('Error fetching post details:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching post details:', error);
+        }
+    }
+
+
+
+    // Update post
     document.getElementById('editPostForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
         const token = localStorage.getItem('authToken');
         if (!token) {
             alert('You must be logged in to update a post!');
-            window.location.href = "http://localhost:8201/api/login";
+            window.location.href = 'http://localhost:8201/api/login';
             return;
         }
 
-        //const postId = localStorage.getItem('editPostId'); // Assume post ID is stored in localStorage
+        const postId = document.getElementById('postId').value;
         const title = document.getElementById('title').value;
+
+        const userEmail = localStorage.getItem('userEmail');
         const categoryId = document.getElementById('category').value;
         const description = document.getElementById('content').value;
         const status = document.getElementById('status').value;
 
         const postData = {
-            userEmail: localStorage.getItem('userEmail'),
+            id: parseInt(postId), // Include the post ID
             title: title,
             description: description,
-            categoryId: parseInt(categoryId),
-
+            categoryId: parseInt(categoryId), // Wrap the category ID in an object
+            status: status, // Include status if required by the backend
+            userEmail: userEmail // Pass the user's email if relevant
         };
 
         try {
-            const response = await fetch('http://localhost:8201/api/post/update-post', {
+            const response = await fetch(`http://localhost:8201/api/post/update-post`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -122,7 +176,7 @@
 
             if (response.ok) {
                 alert('Post updated successfully!');
-                window.location.href = "http://localhost:8201/api/userBlogList";
+                window.location.href = 'http://localhost:8201/api/userBlogList';
             } else {
                 const errorData = await response.json();
                 alert(`Failed to update post: ${errorData.message}`);
@@ -133,11 +187,11 @@
         }
     });
 
-    // Initialize categories on page load
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', fetchPostDetails);
     document.addEventListener('DOMContentLoaded', loadCategories);
 </script>
 
-<!-- Footer -->
 <footer class="footer">
     <div class="footer-links">
         <a href="privacy.html">Privacy Policy</a>

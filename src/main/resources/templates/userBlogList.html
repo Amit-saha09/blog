@@ -329,26 +329,19 @@
         }
 
         // Redirect to the post view page with the post ID
-        window.location.href = `http://localhost:8201/api/editBlogPost/${postId}`;
+        //window.location.href = `http://localhost:8201/api/editBlogPost/${postId}`;
+
+        const targetUrl = `http://localhost:8201/api/editBlogPost/${postId}`;
+        //console.log(`Redirecting to: ${targetUrl}`);
+        //alert(`Redirecting to: ${targetUrl}`);
+        window.location.href = targetUrl;
     }
 
-    //delete a post
-    /*function deletePost(postId) {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-            alert("Please login to view the post!");
-            localStorage.setItem('redirectAfterLogin', window.location.href);
-            window.location.href = "http://localhost:8201/api/login";
-            return;
-        }
 
-        // Redirect to the post view page with the post ID
-        window.location.href = `http://localhost:8201/api/deleteBlogPost/${postId}`;
-    }*/
-
+    //function to delete a post
     async function deletePost(postId) {
         const token = localStorage.getItem('authToken');
-        alert(token)
+        //alert(token)
         if (!token) {
             alert("Please login to delete the post!");
             localStorage.setItem('redirectAfterLogin', window.location.href);
@@ -379,6 +372,7 @@
                 if (row) {
                     row.remove();
                 }
+                getBlogPosts();
             } else {
                 alert("Failed to delete the post. Please try again.");
             }

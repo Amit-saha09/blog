@@ -100,7 +100,9 @@ public class WebController {
     }
 
     @GetMapping("/editBlogPost/{id}")
-    public String editBlogPost() {
+    public String editBlogPost(@PathVariable Long id, Model model) {
+        // Pass the post ID to the HTML via the model
+        model.addAttribute("postId", id);
         return "editBlogPost";  // This will look for editBlogPost.html in the templates folder
     }
 
