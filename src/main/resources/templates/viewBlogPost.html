@@ -145,8 +145,16 @@
 <!-- JavaScript for Dynamic Content -->
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
+        // Extract 'id' from the URL query string
         const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get("id") || 1; // Default to ID 1 if no parameter
+        const postId = urlParams.get("id"); // Get the dynamic 'id' parameter
+
+        if (!postId) {
+            // If 'id' is missing, show an error or fallback
+            document.getElementById("post-body").innerHTML = "<p>Post ID is missing in the URL.</p>";
+            return;
+        }
+
         const apiUrl = `http://localhost:8201/api/post/get-by-id/${postId}`;
 
         try {
@@ -165,10 +173,10 @@
                 document.getElementById("author-initials").textContent = getInitials(post.user.firstName, post.user.lastName);
                 document.getElementById("author-name").textContent = `${post.user.firstName} ${post.user.lastName}`;
                 document.getElementById("post-date").textContent = `Published • ${new Date(post.user.createdAt).toDateString()}`;
-                document.getElementById("post-title").textContent = post.description || "Untitled";
+                document.getElementById("post-title").textContent = post.title || "Untitled";
                 document.getElementById("post-body").innerHTML = `
-                        <p>${post.description || "No content available."}</p>
-                    `;
+                <p>${post.description || "No content available."}</p>
+            `;
             } else {
                 console.error("Failed to fetch post data:", response.statusText);
                 document.getElementById("post-body").innerHTML = "<p>Failed to load the post content.</p>";
