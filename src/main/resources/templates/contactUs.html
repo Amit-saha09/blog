@@ -14,46 +14,13 @@
 
 <body>
 <div class="contact-container">
-    <!-- Info Section -->
-    <div class="info-section">
-        <!-- Business Hours -->
-        <div class="info-box">
-            <i class="fas fa-clock"></i>
-            <h3>Business Hours</h3>
-            <p>Monday - Friday: 9 AM - 5 PM</p>
-            <p>Saturday: 10 AM - 4 PM</p>
-        </div>
-
-        <!-- Phone Number -->
-        <div class="info-box">
-            <i class="fas fa-phone"></i>
-            <h3>Phone Number</h3>
-            <p>+1 234-567-890</p>
-            <p>888-0123-4567 (Toll-Free)</p>
-        </div>
-
-        <!-- Fax -->
-        <div class="info-box">
-            <i class="fas fa-fax"></i>
-            <h3>Fax</h3>
-            <p>+1 234-567-8900</p>
-        </div>
-
-        <!-- Email -->
-        <div class="info-box">
-            <i class="fas fa-envelope"></i>
-            <h3>Email</h3>
-            <p>hello@company.com</p>
-        </div>
-    </div>
-
     <!-- Contact Form Section -->
     <div class="form-section">
         <h1>Contact Us</h1>
         <form id="contactForm" onsubmit="submitContactForm(event)">
-            <!-- Full Name -->
+            <!-- Subject -->
             <div class="form-group">
-                <input type="text" id="name" placeholder="Enter your name" required>
+                <input type="text" id="subject" placeholder="Enter the subject" required>
             </div>
 
             <!-- Email -->
@@ -61,14 +28,9 @@
                 <input type="email" id="email" placeholder="Enter a valid email address" required>
             </div>
 
-            <!-- Phone Number -->
+            <!-- Content -->
             <div class="form-group">
-                <input type="tel" id="phone" placeholder="Enter your phone number" pattern="[0-9]{10}" required>
-            </div>
-
-            <!-- Message -->
-            <div class="form-group">
-                <textarea id="message" rows="5" placeholder="Enter your message" required></textarea>
+                <textarea id="content" rows="5" placeholder="Enter your message" required></textarea>
             </div>
 
             <!-- Submit Button -->
@@ -82,120 +44,54 @@
 </footer>
 
 <script>
-    function submitContactForm(event) {
+    async function submitContactForm(event) {
         // Prevent default form submission
         event.preventDefault();
 
         // Get form values
-        const name = document.getElementById("name").value.trim();
+        const subject = document.getElementById("subject").value.trim();
         const email = document.getElementById("email").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const message = document.getElementById("message").value.trim();
+        const content = document.getElementById("content").value.trim();
 
-        // Clear errors
-        let isValid = true;
-
-        // Validation patterns
+        // Validation pattern for email
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phonePattern = /^\d{10}$/;
 
-        // Validate name
-        if (!name) {
-            alert("Name is required.");
-            isValid = false;
+        if (!subject || !emailPattern.test(email) || !content) {
+            alert("Please fill out all fields with valid information.");
+            return;
         }
 
-        // Validate email
-        if (!emailPattern.test(email)) {
-            alert("Invalid email address.");
-            isValid = false;
-        }
-
-        // Validate phone
-        if (!phonePattern.test(phone)) {
-            alert("Enter a valid phone number.");
-            isValid = false;
-        }
-
-        // Validate message
-        if (!message) {
-            alert("Message cannot be empty.");
-            isValid = false;
-        }
-
-        // If valid, submit the form (or show a success message)
-        if (isValid) {
-            alert("Form submitted successfully!");
-        }
-    }
-</script>
-
-</body>
-</html>
-
-
-
-
-
-
-
-<!--
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
-</head>
-<body>
-<h2>Contact Us</h2>
-<form id="contactForm">
-    <label for="userName">Your Name:</label>
-    <input type="text" id="userName" name="userName" required>
-    <br><br>
-
-    <label for="userEmail">Your Email:</label>
-    <input type="email" id="userEmail" name="userEmail" required>
-    <br><br>
-
-    <label for="userMessage">Your Message:</label>
-    <textarea id="userMessage" name="userMessage" rows="4" required></textarea>
-    <br><br>
-
-    <button type="button" onclick="submitContactForm()">Submit</button>
-</form>
-
-<div id="responseMessage"></div>
-
-<script>
-    async function submitContactForm() {
-        const userName = document.getElementById("userName").value;
-        const userEmail = document.getElementById("userEmail").value;
-        const userMessage = document.getElementById("userMessage").value;
-
-        const contactData = {
-            userName: userName,
-            userEmail: userEmail,
-            userMessage: userMessage
+        // Create request body
+        const requestBody = {
+            id: 0, // Assuming '0' for new contact
+            subject: subject,
+            content: content,
+            email: email,
+            reviewed: false // Assuming new submissions are not reviewed yet
         };
 
         try {
-            const response = await fetch("http://localhost:8201/api/contact-us", {
+            const response = await fetch("http://localhost:8201/api/contact-us/create-contact-us", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(contactData)
+                body: JSON.stringify(requestBody)
             });
 
-            const result = await response.json();
-            document.getElementById("responseMessage").innerText =
-                response.ok ? "Your message has been sent successfully!" : `Error: ${result.message}`;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const responseData = await response.json();
+            alert("Thank you for reaching out! Your message has been successfully submitted.");
+            document.getElementById("contactForm").reset();
         } catch (error) {
-            document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
+            console.error("Error submitting contact form:", error);
+            alert("There was an error submitting your request. Please try again later.");
         }
     }
 </script>
+
 </body>
 </html>
--->
