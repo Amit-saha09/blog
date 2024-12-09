@@ -261,7 +261,7 @@
             // Use correct field names based on the API response
             row.innerHTML = `
                 <td>${post.title || "No Title"}</td> <!-- Handle null titles -->
-                <td>${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Not Available"}</td> <!-- Handle null createdAt -->
+                <td>${ new Date().toLocaleDateString()}</td> <!-- Handle null createdAt -->
                 <td>${post.category ? post.category.name : "Uncategorized"}</td> <!-- Access category name -->
                 <td class="status ${post.isDeleted ? 'deleted' : 'active'}">${post.isDeleted ? 'Deleted' : 'Active'}</td>
                 <td><button class="btn btn-view" onclick="viewPost(${post.id})">View</button></td>
