@@ -83,9 +83,19 @@ public class PostService extends
 
     //notify the observers
     public void notifyObservers(String postTitle) {
+        addSubscribedUsersAsObservers();  // Add subscribed users to the observers list
+
+        // Notify all observers (users)
+        for (Observer observer : observers) {
+            observer.update(postTitle);  // Calling the update() method of the observer (user)
+        }
+    }
+
+    // Helper method to add subscribed users as observers
+    private void addSubscribedUsersAsObservers() {
         List<User> subscribedUsers = userRepository.findByIsActivatedTrue();
 
-        //if no active users
+        // If no active users
         if (subscribedUsers.isEmpty()) {
             System.out.println("No active users to notify.");
             return;
@@ -94,11 +104,6 @@ public class PostService extends
         // Add each active user as an observer
         for (Observer user : subscribedUsers) {
             addObserver(user);  // Adding observer
-        }
-
-        // Notify all observers (users)
-        for (Observer observer : observers) {
-            observer.update(postTitle);  // Calling the update() method of the observer (user)
         }
     }
 
