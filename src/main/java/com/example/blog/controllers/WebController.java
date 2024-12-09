@@ -55,17 +55,6 @@ public class WebController {
         return "createFAQ";  // This will look for createFAQ.html in the templates folder
     }
 
-    /*@PostMapping("/create-faq")
-    public ResponseEntity<Response<FaqResponse>> createFaq(@RequestBody @Valid FaqRequest faqRequest, BindingResult bindingResult) {
-        // Call the service to handle the FAQ creation logic
-        return faqService.createFaq(faqRequest, bindingResult);
-    }*/
-
-    // New login page
-    /*@GetMapping("/auth/authenticate")
-    public String loginPage() {
-        return "login";  // This will look for login.html in the templates folder
-    }*/
 
     // New login page
     @GetMapping("/login")
@@ -73,24 +62,12 @@ public class WebController {
         return "login";  // This will look for login.html in the templates folder
     }
 
-    // Handle login POST request
-    /*@PostMapping("/auth/authenticate")
-    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest, BindingResult bindingResult) {
-        // Call the AuthService to authenticate the user
-        return authService.authenticate(authRequest, bindingResult);
-    }*/
-
 
     // User Blog List page
     @GetMapping("/userBlogList")
     public String userBlogList() {
         return "userBlogList";  // This will look for userBlogList.html in the templates folder
     }
-
-    /*@GetMapping("/viewBlogPost/{id}")
-    public String viewBlogPost() {
-        return "viewBlogPost";  // This will look for viewBlogPost.html in the templates folder
-    }*/
 
     @GetMapping("/viewBlogPost/{id}")
     public String viewBlogPost(@PathVariable Long id, Model model) {
@@ -152,7 +129,7 @@ public class WebController {
     //User Profile page
     @GetMapping("/user-profile")
     public String userProfilePage() {
-        return "userProfile";  // This will look for logout.html in the templates folder
+        return "userProfile";  // This will look for user-profile.html in the templates folder
     }
 
     //Create New Post page

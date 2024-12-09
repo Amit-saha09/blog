@@ -76,6 +76,18 @@
       navList.appendChild(welcomeListItem);
     }
 
+    // Add Profile link if the user is logged in
+    let profileLink = document.querySelector('.profile-link');
+    if (!profileLink && userEmail) {
+        profileLink = document.createElement('a');
+        profileLink.href = "http://localhost:8201/api/user-profile";
+        profileLink.textContent = 'Profile';
+        profileLink.classList.add('dynamic-link', 'profile-link');
+        const profileListItem = document.createElement('li');
+        profileListItem.appendChild(profileLink);
+        navList.appendChild(profileListItem);
+    }
+
     // Check and add MyBlogPosts Link if the user is logged in
     let myBlogPostsLink = document.querySelector('.my-blog-posts-link');
     if (!myBlogPostsLink && userEmail) {
