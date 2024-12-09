@@ -150,7 +150,9 @@ public class UserService extends
             user.setFirstName(request.getFirstName());
             user.setLastName(request.getLastName());
             user.setPhone(request.getPhone());
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            if(request.getWantsPasswordChange()){
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+            }
             userRepository.save(user);
             UserResponse userResponse = modelMapper.map(user, UserResponse.class);
             response.setObj(userResponse);

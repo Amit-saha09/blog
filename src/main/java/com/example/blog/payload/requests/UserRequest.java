@@ -30,6 +30,8 @@ public class UserRequest extends IdHolderRequestBodyDTO {
 
     private String userType;
 
+    private Boolean wantsPasswordChange;
+
 
     private Boolean isActivated;
 

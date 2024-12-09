@@ -28,18 +28,9 @@
 <main class="main-content">
   <section class="profile">
     <div class="container">
-      <!-- Banner Section -->
-      <div class="profile-banner">
-        <div class="user-initials">
-          TW
-        </div>
-      </div>
-
       <!-- Profile Information -->
-      <div class="profile-info">
-        <h2>Tom Walker</h2>
-        <p>Email: twalker1999@example.com</p>
-        <p>Bio: Software developer and blogger</p>
+      <div class="profile-info" id="profile-info">
+        <h2>Loading...</h2>
       </div>
     </div>
   </section>
@@ -47,19 +38,32 @@
   <!-- Form Section -->
   <section class="edit-profile">
     <div class="container">
-      <form action="/update-profile" method="post" class="profile-form">
+      <form id="profile-form" class="profile-form">
         <h3>Edit Profile</h3>
         <div class="form-group">
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" value="JohnDoe" required>
+          <label for="firstName">First Name:</label>
+          <input type="text" id="firstName" name="firstName" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name:</label>
+          <input type="text" id="lastName" name="lastName" required>
         </div>
         <div class="form-group">
           <label for="email">Email:</label>
-          <input type="email" id="email" name="email" value="johndoe@example.com" required>
+          <input type="email" id="email" name="email" readonly>
         </div>
         <div class="form-group">
-          <label for="bio">Bio:</label>
-          <textarea id="bio" name="bio" rows="4" placeholder="Write something about yourself...">Software developer and blogger</textarea>
+          <label for="phone">Phone:</label>
+          <input type="text" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="change-password-checkbox"> Wanna change password?
+          </label>
+        </div>
+        <div class="form-group" id="password-group" style="display: none;">
+          <label for="password">New Password:</label>
+          <input type="password" id="password" name="password">
         </div>
         <div class="form-actions">
           <button type="submit" class="btn primary-btn">Save Changes</button>
@@ -69,12 +73,11 @@
   </section>
 </main>
 
-<!-- Footer Section -->
 <footer class="footer">
   <div class="container">
     <p>&copy; 2024 BlogPost Website. All rights reserved.</p>
     <nav class="footer-nav">
-      <ul class="footer-nav-list"><li>
+      <ul class="footer-nav-list">
         <li><a href="privacy-policy.html" class="footer-link">Privacy Policy</a></li>
         <li><a href="terms-of-service.html" class="footer-link">Terms of Service</a></li>
         <li><a href="contact.html" class="footer-link">Contact Us</a></li>
@@ -82,5 +85,94 @@
     </nav>
   </div>
 </footer>
+
+<script>
+  const apiUrl = "http://localhost:8201/api";
+  const email = localStorage.getItem('userEmail'); // Retrieve email from local storage
+  const authToken = localStorage.getItem('authToken'); // Retrieve token from local storage
+
+  // Function to add the Authorization header
+  const getAuthHeaders = () => ({
+    Authorization: `Bearer ${authToken}`,
+    "Content-Type": "application/json"
+  });
+
+  // Populate the profile form with user details
+  async function loadUserProfile() {
+    try {
+      const response = await fetch(`${apiUrl}/user/get-user-by-email/${email}`, {
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+
+      if (data.success && data.obj) {
+        document.getElementById('firstName').value = data.obj.firstName;
+        document.getElementById('lastName').value = data.obj.lastName;
+        document.getElementById('email').value = data.obj.email;
+        document.getElementById('phone').value = data.obj.phone;
+
+        document.getElementById('profile-info').innerHTML = `
+          <h2>${data.obj.firstName} ${data.obj.lastName}</h2>
+          <p>Email: ${data.obj.email}</p>
+          <p>Phone: ${data.obj.phone}</p>
+          <p>User Type: ${data.obj.userType}</p>
+        `;
+      } else {
+        console.warn("User not found:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  }
+
+  // Handle password checkbox toggle
+  document.getElementById('change-password-checkbox').addEventListener('change', (event) => {
+    const passwordGroup = document.getElementById('password-group');
+    passwordGroup.style.display = event.target.checked ? 'block' : 'none';
+  });
+
+  // Submit the updated profile
+  document.getElementById('profile-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const phone = document.getElementById('phone').value;
+    const wantsPasswordChange = document.getElementById('change-password-checkbox').checked;
+    const password = document.getElementById('password').value || null;
+
+    const requestBody = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      wantsPasswordChange,
+      password: wantsPasswordChange ? password : null,
+      isActivated: true
+    };
+
+    try {
+      const response = await fetch(`${apiUrl}/user/update-user-profile`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(requestBody)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Profile updated successfully!");
+        loadUserProfile(); // Refresh profile details
+      } else {
+        alert(`Error updating profile: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("An error occurred while updating the profile.");
+    }
+  });
+
+  // Initialize the page
+  document.addEventListener('DOMContentLoaded', loadUserProfile);
+</script>
 </body>
 </html>

@@ -192,6 +192,7 @@ public class PostService extends
                 if(!ObjectUtils.isEmpty(post)){
                     post.setImage(postRequest.getImage());
                     post.setDescription(postRequest.getDescription());
+                    post.setTitle(postRequest.getTitle());
                     postUpdate= postRepository.save(post);
                 }
                 PostResponse postResponse = new PostResponse();
