@@ -56,15 +56,6 @@
           <label for="phone">Phone:</label>
           <input type="text" id="phone" name="phone" required>
         </div>
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="change-password-checkbox"> Wanna change password?
-          </label>
-        </div>
-        <div class="form-group" id="password-group" style="display: none;">
-          <label for="password">New Password:</label>
-          <input type="password" id="password" name="password">
-        </div>
         <div class="form-actions">
           <button type="submit" class="btn primary-btn">Save Changes</button>
         </div>
@@ -125,29 +116,20 @@
     }
   }
 
-  // Handle password checkbox toggle
-  document.getElementById('change-password-checkbox').addEventListener('change', (event) => {
-    const passwordGroup = document.getElementById('password-group');
-    passwordGroup.style.display = event.target.checked ? 'block' : 'none';
-  });
-
   // Submit the updated profile
   document.getElementById('profile-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
-    const wantsPasswordChange = document.getElementById('change-password-checkbox').checked;
-    const password = document.getElementById('password').value || null;
 
     const requestBody = {
       firstName,
       lastName,
       email,
       phone,
-      wantsPasswordChange,
-      password: wantsPasswordChange ? password : null,
       isActivated: true
     };
 
