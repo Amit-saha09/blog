@@ -16,9 +16,7 @@ public class RegisterRequest {
     @NotBlank(message = "Email cannot be blank")
     @NotNull(message = "Email cannot be null")
     private String email;
-    @Pattern(regexp = RegexConstants.PHONE_NUMBER_BD, message = "Mobile number must be 11 digits or 13 digits and must start with 01 or +8801")
-    @NotBlank(message = "Mobile number cannot be blank")
-    @NotNull(message = "Mobile number cannot be null")
+
     private String phone;
     @Pattern(regexp = RegexConstants.PASSWORD, message = "Password must contain minimum 8 characters," +
             " contain both lower and uppercase letters," +
