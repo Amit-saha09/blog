@@ -1,6 +1,6 @@
-/*
 package com.example.blog.services;
 
+import com.example.blog.helper.Response;
 import com.example.blog.payload.requests.AuthRequest;
 import com.example.blog.payload.responses.AccountResponse;
 import com.example.blog.payload.responses.LoginResponse;
@@ -12,8 +12,14 @@ import com.example.blog.services.iService.IJwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,80 +40,314 @@ class AuthServiceTest {
         authService = new AuthService(userRepository, passwordEncoder, jwtService);
     }
 
+    // Successful registration
     @Test
-    void testRegister_Success() {
+    void testRegister_Successful() {
         RegisterRequest request = new RegisterRequest();
-        request.setEmail("test@example.com");
+        request.setFirstName("John");
+        request.setLastName("Doe");
+        request.setEmail("john@example.com");
+        request.setPhone("1234567890");
         request.setPassword("password");
-        request.setUsername("testuser");
 
-        when(userRepository.existsByEmail("test@example.com")).thenReturn(false);
-        when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
-        User savedUser = new User();
-        savedUser.setEmail("test@example.com");
-        savedUser.setPassword("encodedPassword");
-        savedUser.setRole(Role.USER);
+        when(userRepository.countByEmailAndIsDeletedFalse("john@example.com")).thenReturn(0L);
+        when(passwordEncoder.encode("password")).thenReturn("encoded-password");
 
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId(1L);
+            user.setCreatedAt(new Date());
+            user.setUpdatedAt(new Date());
+            return user;
+        });
 
-        AuthResponse response = authService.register(request);
+        ResponseEntity<?> responseEntity = authService.register(request, bindingResult);
 
-        assertNotNull(response);
-        assertEquals("dummy-token", response.getToken());
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        @SuppressWarnings("unchecked")
+        Response<AccountResponse> body = (Response<AccountResponse>) responseEntity.getBody();
+
+        assertNotNull(body);
+        assertTrue(body.isSuccess());
+        assertNotNull(body.getObj());
+        assertEquals("john@example.com", body.getObj().getEmail());
+        assertEquals("John Doe", body.getObj().getUserName());
     }
-
+    // Duplicate email registration
     @Test
     void testRegister_DuplicateEmail() {
         RegisterRequest request = new RegisterRequest();
-        request.setEmail("test@example.com");
-
-        when(userRepository.existsByEmail("test@example.com")).thenReturn(true);
-
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            authService.register(request);
-        });
-
-        assertEquals("User already exists with this email", exception.getMessage());
-    }
-
-    @Test
-    void testAuthenticate_Success() {
-        AuthRequest request = new AuthRequest();
-        request.setEmail("test@example.com");
+        request.setFirstName("John");
+        request.setLastName("Doe");
+        request.setEmail("john@example.com");
+        request.setPhone("1234567890");
         request.setPassword("password");
 
-        User existingUser = new User();
-        existingUser.setEmail("test@example.com");
-        existingUser.setPassword("encodedPassword");
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(existingUser));
-        when(passwordEncoder.matches("password", "encodedPassword")).thenReturn(true);
+        when(userRepository.countByEmailAndIsDeletedFalse("john@example.com")).thenReturn(1L);
 
-        AuthResponse response = authService.authenticate(request);
+        ResponseEntity<?> responseEntity = authService.register(request, bindingResult);
 
-        assertNotNull(response);
-        assertEquals("dummy-token", response.getToken());
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+
+        @SuppressWarnings("unchecked")
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("Email or Phone is already registered!", responseBody.getMessage());
     }
 
+    // Validation error (e.g., invalid email)
     @Test
-    void testAuthenticate_InvalidCredentials() {
-        AuthRequest request = new AuthRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("wrongPassword");
+    void testRegister_ValidationError() {
+        RegisterRequest request = new RegisterRequest();
+        request.setFirstName("");
+        request.setLastName("Doe");
+        request.setEmail("invalid-email");
+        request.setPhone("1234567890");
+        request.setPassword("password");
 
-        User existingUser = new User();
-        existingUser.setEmail("test@example.com");
-        existingUser.setPassword("encodedPassword");
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(
+                new FieldError("registerRequest", "email", "Invalid email format"),
+                new FieldError("registerRequest", "firstName", "First name is required")
+        ));
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(existingUser));
-        when(passwordEncoder.matches("wrongPassword", "encodedPassword")).thenReturn(false);
+        ResponseEntity<?> responseEntity = authService.register(request, bindingResult);
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            authService.authenticate(request);
-        });
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
-        assertEquals("Invalid credentials", exception.getMessage());
+        @SuppressWarnings("unchecked")
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("User not created for a validation error.", responseBody.getMessage());
+        assertTrue(responseBody.getErrorMessage().contains("Invalid email format"));
+        assertTrue(responseBody.getErrorMessage().contains("First name is required"));
     }
+
+
+    // Password length check
+    @Test
+    void testRegister_PasswordLength() {
+        RegisterRequest request = new RegisterRequest();
+        request.setFirstName("John");
+        request.setLastName("Doe");
+        request.setEmail("john@example.com");
+        request.setPhone("1234567890");
+        request.setPassword("123"); // Invalid password, too short
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(
+                new FieldError("registerRequest", "password", "Password length should be at least 6 characters.")
+        ));
+
+        ResponseEntity<?> responseEntity = authService.register(request, bindingResult);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+        @SuppressWarnings("unchecked")
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("User not created for a validation error.", responseBody.getMessage());
+        assertTrue(responseBody.getErrorMessage().contains("Password length should be at least 6 characters."));
+    }
+
+    // Internal server error
+    @Test
+    void testRegister_InternalServerError() {
+        RegisterRequest request = new RegisterRequest();
+        request.setFirstName("John");
+        request.setLastName("Doe");
+        request.setEmail("john@example.com");
+        request.setPhone("1234567890");
+        request.setPassword("password");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(userRepository.countByEmailAndIsDeletedFalse("john@example.com")).thenReturn(0L);
+        when(passwordEncoder.encode("password")).thenThrow(new RuntimeException("Database issue"));
+
+        ResponseEntity<?> responseEntity = authService.register(request, bindingResult);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+
+        @SuppressWarnings("unchecked")
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("Something went wrong. Please try again later.", responseBody.getMessage());
+    }
+
+    // Successful authentication
+    @Test
+    void testAuthenticate_Successful() {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("john@example.com");
+        request.setPassword("password");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        User user = new User();
+        user.setEmail("john@example.com");
+        user.setPassword("encoded-password");
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setIsActivated(true);
+        user.setUserType("USER");
+
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("password", "encoded-password")).thenReturn(true);
+        when(jwtService.generateToken(user)).thenReturn("dummy-token");
+
+        ResponseEntity<?> responseEntity = authService.authenticate(request, bindingResult);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        @SuppressWarnings("unchecked")
+        Response<LoginResponse> responseBody = (Response<LoginResponse>) responseEntity.getBody();
+
+        assertNotNull(responseBody);
+        assertTrue(responseBody.isSuccess());
+        assertEquals("Username authenticated successfully!", responseBody.getMessage());
+
+        LoginResponse loginResponse = responseBody.getObj();
+        assertNotNull(loginResponse);
+        assertEquals("john@example.com", loginResponse.getEmail());
+        assertEquals("John", loginResponse.getFirstName());
+        assertEquals("Doe", loginResponse.getLastName());
+        assertEquals("USER", loginResponse.getUserType());
+        assertEquals("dummy-token", loginResponse.getAccessToken());
+    }
+
+    // Invalid email during authentication
+    @Test
+    void testAuthenticate_InvalidEmail() {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("invalid@example.com");
+        request.setPassword("password");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(userRepository.findByEmail("invalid@example.com")).thenReturn(Optional.empty());
+
+        ResponseEntity<?> responseEntity = authService.authenticate(request, bindingResult);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+
+        @SuppressWarnings("unchecked")
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("User account not found!", responseBody.getMessage());
+    }
+
+
+    // Wrong password during authentication
+    @Test
+    void testAuthenticate_WrongPassword() {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("john@example.com");
+        request.setPassword("wrong-password");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        User user = new User();
+        user.setEmail("john@example.com");
+        user.setPassword("encoded-password");
+        user.setIsActivated(true);
+
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("wrong-password", "encoded-password")).thenReturn(false);
+
+        ResponseEntity<?> responseEntity = authService.authenticate(request, bindingResult);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("Password is incorrect", responseBody.getMessage());
+    }
+
+
+    // Account not activated during authentication
+    @Test
+    void testAuthenticate_AccountNotActivated() {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("john@example.com");
+        request.setPassword("password");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        User user = new User();
+        user.setEmail("john@example.com");
+        user.setPassword("encoded-password");
+        user.setIsActivated(false);  // Account is not activated
+
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("password", "encoded-password")).thenReturn(true);
+
+        ResponseEntity<?> responseEntity = authService.authenticate(request, bindingResult);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("This user account is not activated!", responseBody.getMessage());
+    }
+
+    // Internal server error during authentication
+    @Test
+    void testAuthenticate_InternalServerError() {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("john@example.com");
+        request.setPassword("password");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(userRepository.findByEmail("john@example.com")).thenThrow(new RuntimeException("Database issue"));
+
+        ResponseEntity<?> responseEntity = authService.authenticate(request, bindingResult);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+
+        Response<?> responseBody = (Response<?>) responseEntity.getBody();
+        assertNotNull(responseBody);
+        assertFalse(responseBody.isSuccess());
+        assertEquals("Login failed due to internal error.", responseBody.getMessage());
+        assertEquals("Database issue", responseBody.getErrorMessage());
+    }
+
 }
-*/
