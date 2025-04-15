@@ -132,6 +132,10 @@ public class PostService extends
                 return new ResponseEntity<>(getSuccessResponse("User Not Found", response), HttpStatus.OK);
             } else {
                 user = userRepository.findByEmailAndIsActivatedTrue(postRequest.getUserEmail());
+                if(ObjectUtils.isEmpty(user)){
+                    return new ResponseEntity<>(getSuccessResponse("User Not Found", response), HttpStatus.OK);
+
+                }
             }
 
             if (ObjectUtils.isEmpty(postRequest.getCategoryId())) {
