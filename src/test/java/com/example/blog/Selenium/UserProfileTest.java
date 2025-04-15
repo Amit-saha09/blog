@@ -18,7 +18,7 @@ public class UserProfileTest {
     public void setUp() {
         System.setProperty(
                 "webdriver.chrome.driver",
-                "C:\\Users\\patel\\Desktop\\Winter-2025\\CIS-565\\chromedriver-win64\\chromedriver.exe"
+                "C:\\Windows\\chromedriver.exe"
         );
 
         driver = new ChromeDriver();

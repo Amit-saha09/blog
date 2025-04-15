@@ -20,6 +20,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends ServiceRepository<User> {
 
+   boolean existsByEmail(String email);
    User findByEmailAndIsActivatedTrue(String email);
    Optional<User> findByEmail(String username);
    Long countByEmailAndIsDeletedFalse(String email);
