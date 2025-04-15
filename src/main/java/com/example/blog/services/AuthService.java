@@ -15,12 +15,10 @@ import com.example.blog.services.iService.IAuthService;
 import com.example.blog.services.iService.IJwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.modelmapper.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,12 +32,9 @@ import java.util.Optional;
 @Transactional
 public class AuthService implements IAuthService, CommonFunctions {
 
-
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final IJwtService jwtService;
-    private final AuthenticationManager authManager;
 
 
     public ResponseEntity<?> register(RegisterRequest request, BindingResult bindingResult) {
@@ -59,8 +54,6 @@ public class AuthService implements IAuthService, CommonFunctions {
             if (count > 0) {
                 return new ResponseEntity<>(getErrorResponse("Email or Phone is already registered!"), HttpStatus.CONFLICT);
             }
-            ModelMapper modelMapper = new ModelMapper();
-            //User user = modelMapper.map(request, User.class);
 
             User user = new User();
             user.setFirstName(request.getFirstName());
@@ -109,12 +102,7 @@ public class AuthService implements IAuthService, CommonFunctions {
                 return new ResponseEntity<>(getErrorResponse("User account not found!"), HttpStatus.UNAUTHORIZED);
             }
             User user = optionalUser.get();
-            /*authManager.authenticate(m
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
-            );*/
+
             if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
                 return new ResponseEntity<>(getErrorResponse("Password is incorrect"), HttpStatus.UNAUTHORIZED);
             }
@@ -150,6 +138,7 @@ public class AuthService implements IAuthService, CommonFunctions {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
 }

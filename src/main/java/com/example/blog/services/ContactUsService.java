@@ -31,7 +31,7 @@ public class ContactUsService extends
     private final Logger logger = LoggerFactory.getLogger(ContactUsService.class);
 
     // Private constructor for Singleton
-    private ContactUsService(ContactUsRepository repository, ModelMapper modelMapper) {
+    ContactUsService(ContactUsRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
         this.modelMapper = modelMapper;
     }
