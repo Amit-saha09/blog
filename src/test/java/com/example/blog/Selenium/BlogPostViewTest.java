@@ -17,7 +17,7 @@ public class BlogPostViewTest {
         // Set the path to ChromeDriver
         System.setProperty(
                 "webdriver.chrome.driver",
-                "C:\\Users\\patel\\Desktop\\Winter-2025\\CIS-565\\chromedriver-win64\\chromedriver.exe"
+                "C:\\Windows\\chromedriver.exe"
         );
 
         driver = new ChromeDriver();

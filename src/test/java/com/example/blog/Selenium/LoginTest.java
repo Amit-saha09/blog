@@ -20,9 +20,8 @@ public class LoginTest {
     public void setup() {
         System.setProperty(
                 "webdriver.chrome.driver",
-                "C:\\Users\\patel\\Desktop\\Winter-2025\\CIS-565\\chromedriver-win64\\chromedriver.exe"
+                "C:\\Windows\\chromedriver.exe"
         );
-
         ChromeOptions options = new ChromeOptions();
         options.addArguments(
                 "--remote-allow-origins=*",
@@ -95,10 +94,10 @@ public class LoginTest {
         WebElement loginBtn = driver.findElement(By.className("login-btn"));
 
         email.clear();
-        email.sendKeys("admin@example.com");
+        email.sendKeys("amit@gmail.com");
 
         password.clear();
-        password.sendKeys("password123");
+        password.sendKeys("Aa123456+");
 
         loginBtn.click();
 

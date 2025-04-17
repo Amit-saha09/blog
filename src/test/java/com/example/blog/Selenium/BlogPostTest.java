@@ -18,7 +18,7 @@ public class BlogPostTest {
     public void setUp() {
         System.setProperty(
                 "webdriver.chrome.driver",
-                "C:/Users/patel/Desktop/Winter-2025/CIS-565/chromedriver-win64/chromedriver.exe"
+                "C:\\Windows\\chromedriver.exe"
         );
 
         driver = new ChromeDriver();
@@ -59,7 +59,7 @@ public class BlogPostTest {
         WebElement searchButton = driver.findElement(By.xpath("//button[text()='Search']"));
 
         emailField.clear();
-        emailField.sendKeys("admin@example.com");
+        emailField.sendKeys("amit@gmail.com");
         descriptionField.clear();
         descriptionField.sendKeys("web");
         categoryDropdown.sendKeys("Technology");

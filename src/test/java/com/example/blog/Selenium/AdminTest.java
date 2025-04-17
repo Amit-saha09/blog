@@ -10,8 +10,10 @@ public class AdminTest {
 
     public static void main(String[] args) {
         // Set path to ChromeDriver
-        System.setProperty("webdriver.chrome.driver",
-                "C:\\Users\\patel\\Desktop\\Winter-2025\\CIS-565\\chromedriver-win64\\chromedriver.exe");
+        System.setProperty(
+                "webdriver.chrome.driver",
+                "C:\\Windows\\chromedriver.exe"
+        );
 
         // Initialize ChromeOptions and WebDriver
         ChromeOptions options = new ChromeOptions();
@@ -22,7 +24,7 @@ public class AdminTest {
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
             // Load the admin dashboard page
-            driver.get("http://localhost:5500/admin-dashboard.html"); // Adjust if needed
+            driver.get("http://localhost:8201/api/admin"); // Adjust if needed
 
             // Inject localStorage auth token and user type
             JavascriptExecutor js = (JavascriptExecutor) driver;

@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                                         "/home",
                                         "/blog-post",
                                         "/login",
+                                        "/login.html",
                                         "/sign-up",
                                         "/userBlogList",
                                         "/about-us",

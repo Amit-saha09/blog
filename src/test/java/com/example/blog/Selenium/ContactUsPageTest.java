@@ -2,6 +2,7 @@ package com.example.blog.Selenium;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -10,19 +11,26 @@ import java.time.Duration;
 public class ContactUsPageTest {
 
     private WebDriver driver;
+    private WebDriverWait wait;
     private final String baseUrl = "http://localhost:8201/api/contact-us";
+
+    // Locators
+    private final By subjectField = By.id("subject");
+    private final By emailField = By.id("email");
+    private final By contentField = By.id("content");
+    private final By submitButton = By.xpath("//button[@type='submit']");
 
     @BeforeTest
     public void setUp() {
-        // Set the path to ChromeDriver
         System.setProperty(
                 "webdriver.chrome.driver",
-                "C:\\Users\\patel\\Desktop\\Winter-2025\\CIS-565\\chromedriver-win64\\chromedriver.exe"
+                "C:\\Windows\\chromedriver.exe"
         );
-
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         driver.get(baseUrl);
     }
 
@@ -30,70 +38,59 @@ public class ContactUsPageTest {
     public void testPageTitleAndFieldsVisible() {
         Assert.assertEquals(driver.getTitle(), "Contact Us", "Page title mismatch.");
 
-        // Locate form fields and submit button
-        WebElement subjectField = driver.findElement(By.id("subject"));
-        WebElement emailField = driver.findElement(By.id("email"));
-        WebElement contentField = driver.findElement(By.id("content"));
-        WebElement submitButton = driver.findElement(By.xpath("//button[@type='submit']"));
-
-        // Verify field and button visibility
-        Assert.assertTrue(subjectField.isDisplayed(), "Subject field not visible.");
-        Assert.assertTrue(emailField.isDisplayed(), "Email field not visible.");
-        Assert.assertTrue(contentField.isDisplayed(), "Content field not visible.");
-        Assert.assertTrue(submitButton.isDisplayed(), "Submit button not visible.");
+        Assert.assertTrue(driver.findElement(subjectField).isDisplayed(), "Subject field not visible.");
+        Assert.assertTrue(driver.findElement(emailField).isDisplayed(), "Email field not visible.");
+        Assert.assertTrue(driver.findElement(contentField).isDisplayed(), "Content field not visible.");
+        Assert.assertTrue(driver.findElement(submitButton).isDisplayed(), "Submit button not visible.");
     }
 
     @Test(priority = 2)
-    public void testSubmitValidForm() throws InterruptedException {
-        // Use dynamic email to avoid duplication
+    public void testSubmitValidForm() {
         String email = "contact" + System.currentTimeMillis() + "@example.com";
 
-        driver.findElement(By.id("subject")).sendKeys("Inquiry about blog collaboration");
-        driver.findElement(By.id("email")).sendKeys(email);
-        driver.findElement(By.id("content")).sendKeys("Hi team, I would like to discuss a blog partnership opportunity.");
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        fillForm("Inquiry about blog collaboration", email,
+                "Hi team, I would like to discuss a blog partnership opportunity.");
+        submitForm();
 
-        // Wait for alert and verify message
-        Thread.sleep(2000); // Use WebDriverWait in real projects
-        Alert alert = driver.switchTo().alert();
-        Assert.assertTrue(
-                alert.getText().toLowerCase().contains("successfully submitted"),
-                "Expected success alert after submission."
-        );
-        alert.accept();
+        verifyAlertContains("successfully submitted", "Success alert not present after submitting valid form.");
     }
 
     @Test(priority = 3)
-    public void testSubmitInvalidEmail() throws InterruptedException {
+    public void testSubmitInvalidEmail() {
         driver.navigate().refresh();
 
-        driver.findElement(By.id("subject")).sendKeys("Invalid Email Test");
-        driver.findElement(By.id("email")).sendKeys("invalid-email.com");
-        driver.findElement(By.id("content")).sendKeys("Test message with invalid email.");
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        fillForm("Invalid Email Test", "invalid-email.com", "Test message with invalid email.");
+        submitForm();
 
-        Thread.sleep(1000); // Use WebDriverWait in real projects
-        Alert alert = driver.switchTo().alert();
-        Assert.assertTrue(
-                alert.getText().toLowerCase().contains("valid information"),
-                "Expected validation alert for invalid email."
-        );
-        alert.accept();
+        verifyAlertContains("valid information", "Expected alert for invalid email, but none appeared.");
     }
 
     @Test(priority = 4)
-    public void testSubmitEmptyFields() throws InterruptedException {
+    public void testSubmitEmptyFields() {
         driver.navigate().refresh();
+        driver.findElement(submitButton).click();
 
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        verifyAlertContains("fill out all fields", "Expected alert for empty fields submission, but none appeared.");
+    }
 
-        Thread.sleep(1000); // Use WebDriverWait in real projects
-        Alert alert = driver.switchTo().alert();
-        Assert.assertTrue(
-                alert.getText().toLowerCase().contains("fill out all fields"),
-                "Expected alert for empty form submission."
-        );
-        alert.accept();
+    private void fillForm(String subject, String email, String content) {
+        driver.findElement(subjectField).sendKeys(subject);
+        driver.findElement(emailField).sendKeys(email);
+        driver.findElement(contentField).sendKeys(content);
+    }
+
+    private void submitForm() {
+        driver.findElement(submitButton).click();
+    }
+
+    private void verifyAlertContains(String expectedText, String errorMessage) {
+        try {
+            Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+            Assert.assertTrue(alert.getText().toLowerCase().contains(expectedText.toLowerCase()), errorMessage);
+            alert.accept();
+        } catch (TimeoutException e) {
+            Assert.fail(errorMessage);
+        }
     }
 
     @AfterTest

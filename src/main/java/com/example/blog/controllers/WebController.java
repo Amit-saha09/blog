@@ -61,6 +61,11 @@ public class WebController {
     public String loginPage() {
         return "login";  // This will look for login.html in the templates folder
     }
+    // New login page
+    @GetMapping("/login.html")
+    public String loginHtmlPage() {
+        return "login";  // This will look for login.html in the templates folder
+    }
 
 
     // User Blog List page

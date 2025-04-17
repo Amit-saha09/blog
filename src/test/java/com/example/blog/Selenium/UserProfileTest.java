@@ -4,15 +4,21 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
 public class UserProfileTest {
 
     private WebDriver driver;
+    private WebDriverWait wait;
+    private final String baseUrl = "http://localhost:8201/api/user-profile";
+
+    // Locators
+    private final By firstNameField = By.id("firstName");
+    private final By lastNameField = By.id("lastName");
+    private final By phoneField = By.id("phone");
+    private final By saveButton = By.cssSelector(".primary-btn");
 
     @BeforeTest
     public void setUp() {
@@ -20,44 +26,46 @@ public class UserProfileTest {
                 "webdriver.chrome.driver",
                 "C:\\Windows\\chromedriver.exe"
         );
-
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        driver.get("about:blank");
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("localStorage.setItem('userEmail', 'test@example.com');");
-        js.executeScript("localStorage.setItem('authToken', 'your-valid-jwt-token');");
+        driver.get(baseUrl);
+        setLocalStorage("userEmail", "test@example.com");
+        setLocalStorage("authToken", "your-valid-jwt-token");
 
-        String baseUrl = "http://localhost:8201/api/user-profile";
-        driver.navigate().to(baseUrl);
+        driver.navigate().refresh();
     }
 
     @Test
     public void testLoadAndEditUserProfile() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement firstNameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameField));
+        WebElement lastNameInput = driver.findElement(lastNameField);
+        WebElement phoneInput = driver.findElement(phoneField);
+        WebElement submitButton = driver.findElement(saveButton);
 
-        WebElement firstNameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("firstName")));
-        WebElement lastNameInput = driver.findElement(By.id("lastName"));
-        WebElement phoneInput = driver.findElement(By.id("phone"));
-        WebElement saveButton = driver.findElement(By.cssSelector(".primary-btn"));
+        Assert.assertFalse(firstNameInput.getAttribute("value").isEmpty(), "First name field is empty.");
+        Assert.assertFalse(lastNameInput.getAttribute("value").isEmpty(), "Last name field is empty.");
 
-        Assert.assertFalse(firstNameInput.getAttribute("value").isEmpty());
-        Assert.assertFalse(lastNameInput.getAttribute("value").isEmpty());
+        updateInputField(firstNameInput, "UpdatedFirstName");
+        updateInputField(lastNameInput, "UpdatedLastName");
+        updateInputField(phoneInput, "1234567890");
 
-        firstNameInput.clear();
-        firstNameInput.sendKeys("UpdatedFirstName");
+        submitButton.click();
 
-        lastNameInput.clear();
-        lastNameInput.sendKeys("UpdatedLastName");
+        String expectedUrl = "http://localhost:8201/api/home";
+        wait.until(ExpectedConditions.urlToBe(expectedUrl));
+        Assert.assertEquals(driver.getCurrentUrl(), expectedUrl, "URL mismatch after saving profile.");
+    }
 
-        phoneInput.clear();
-        phoneInput.sendKeys("1234567890");
+    private void setLocalStorage(String key, String value) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript(String.format("localStorage.setItem('%s', '%s');", key, value));
+    }
 
-        saveButton.click();
-
-        wait.until(ExpectedConditions.urlToBe("http://localhost:8201/api/home"));
-        Assert.assertEquals(driver.getCurrentUrl(), "http://localhost:8201/api/home");
+    private void updateInputField(WebElement element, String value) {
+        element.clear();
+        element.sendKeys(value);
     }
 
     @AfterTest

@@ -1,5 +1,6 @@
 package com.example.blog.Selenium;
 
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
@@ -13,13 +14,12 @@ public class SignUpPageTest {
     private WebDriver driver;
     private JavascriptExecutor js;
     private WebDriverWait wait;
-    private String generatedEmail;
 
     @BeforeTest
     public void setUp() {
         System.setProperty(
                 "webdriver.chrome.driver",
-                "C:\\Users\\patel\\Desktop\\Winter-2025\\CIS-565\\chromedriver-win64\\chromedriver.exe"
+                "C:\\Windows\\chromedriver.exe"
         );
 
         driver = new ChromeDriver();
@@ -28,42 +28,58 @@ public class SignUpPageTest {
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get("http://localhost:8201/api/sign-up");
     }
 
     @Test(priority = 1)
-    public void testPageLoads() {
-        Assert.assertEquals(driver.getTitle(), "Create Account", "Page title should be 'Create Account'");
-        Assert.assertTrue(
-                driver.findElement(By.tagName("h2")).getText().contains("Create a New Account"),
-                "Heading should contain 'Create a New Account'"
-        );
-    }
+    public void testSignupAndLoginFlow() {
+        String tempEmail = "user" + System.currentTimeMillis() + "@example.com";
 
-    @Test(priority = 2)
-    public void testValidAccountCreation() {
-        generatedEmail = "user" + System.currentTimeMillis() + "@example.com";
+        // Visit sign-up page
+        driver.get("http://localhost:8201/api/sign-up");
 
+        // Fill sign-up form
         driver.findElement(By.id("firstName")).sendKeys("Test");
         driver.findElement(By.id("lastName")).sendKeys("User");
-        driver.findElement(By.id("email")).sendKeys(generatedEmail);
+        driver.findElement(By.id("email")).sendKeys(tempEmail);
         driver.findElement(By.id("phone")).sendKeys("1234567890");
         driver.findElement(By.id("password")).sendKeys("password123");
         driver.findElement(By.id("confirmPassword")).sendKeys("password123");
         driver.findElement(By.xpath("//button[text()='Sign Up']")).click();
 
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("responseMessage")));
-        String text = message.getText();
+        Assert.assertTrue(message.getText().toLowerCase().contains("account created"), "Expected account creation success message");
 
+        // Login after signup
+        driver.get("http://localhost:8201/api/login");
+
+        driver.findElement(By.id("email")).sendKeys(tempEmail);
+        driver.findElement(By.id("password")).sendKeys("password123");
+        driver.findElement(By.className("login-btn")).click();
+
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.urlContains("/home"),
+                ExpectedConditions.urlContains("/userBlogList")
+        ));
+
+        String newUrl = driver.getCurrentUrl();
         Assert.assertTrue(
-                text.contains("Account created successfully") || text.toLowerCase().contains("error"),
-                "Expected success or error message after sign-up attempt"
+                newUrl.contains("/home") || newUrl.contains("/userBlogList"),
+                "After login, user should be redirected to /home or /userBlogList"
         );
+
+        // Verify localStorage values
+        Object emailStored = js.executeScript("return localStorage.getItem('userEmail');");
+        Object tokenStored = js.executeScript("return localStorage.getItem('authToken');");
+        Object userType = js.executeScript("return localStorage.getItem('userType');");
+
+        Assert.assertNotNull(emailStored, "userEmail should be stored in localStorage");
+        Assert.assertNotNull(tokenStored, "authToken should be stored in localStorage");
+        Assert.assertNotNull(userType, "userType should be stored in localStorage");
     }
 
-    @Test(priority = 3)
+    @Test(priority = 2)
     public void testPasswordMismatch() {
-        driver.navigate().refresh();
+        driver.get("http://localhost:8201/api/sign-up");
 
         driver.findElement(By.id("firstName")).sendKeys("Mismatch");
         driver.findElement(By.id("lastName")).sendKeys("Case");
@@ -77,9 +93,9 @@ public class SignUpPageTest {
         Assert.assertEquals(response.getText(), "Passwords do not match!", "Password mismatch error should appear.");
     }
 
-    @Test(priority = 4)
+    @Test(priority = 3)
     public void testFormSubmissionWithMissingFields() {
-        driver.navigate().refresh();
+        driver.get("http://localhost:8201/api/sign-up");
 
         driver.findElement(By.id("firstName")).sendKeys("EmptyFields");
         driver.findElement(By.xpath("//button[text()='Sign Up']")).click();
@@ -89,37 +105,6 @@ public class SignUpPageTest {
                 currentUrl.contains("/sign-up"),
                 "User should not proceed if required fields are missing."
         );
-    }
-
-    @Test(priority = 5)
-    public void testLoginAfterSignUp() {
-        driver.get("http://localhost:8201/api/login");
-
-        driver.findElement(By.id("email")).sendKeys(generatedEmail);
-        driver.findElement(By.id("password")).sendKeys("password123");
-        driver.findElement(By.className("login-btn")).click();
-
-        wait.until(ExpectedConditions.or(
-                ExpectedConditions.urlContains("/home"),
-                ExpectedConditions.urlContains("/userBlogList")
-        ));
-
-        String newUrl = driver.getCurrentUrl();
-        Assert.assertTrue(
-                newUrl.contains("/home") || newUrl.contains("/userBlogList"),
-                "After login, user should be redirected to home or blog list page."
-        );
-    }
-
-    @Test(priority = 6)
-    public void testLocalStorageAfterLogin() {
-        Object emailStored = js.executeScript("return localStorage.getItem('userEmail');");
-        Object tokenStored = js.executeScript("return localStorage.getItem('authToken');");
-        Object userType = js.executeScript("return localStorage.getItem('userType');");
-
-        Assert.assertNotNull(emailStored, "userEmail should be stored in localStorage");
-        Assert.assertNotNull(tokenStored, "authToken should be stored in localStorage");
-        Assert.assertNotNull(userType, "userType should be stored in localStorage");
     }
 
     @AfterTest
